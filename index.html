@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>BarberPendant Admin</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --ink:#0f0f0f;--paper:#f6f3ee;--surf:#fff;--muted:#888;--border:rgba(0,0,0,0.09);
@@ -13,71 +13,81 @@
   --green:#1a6b47;--green-lt:#e3f5ec;
   --red:#c0392b;--red-lt:#fdecea;
   --blue:#1a4fa0;--blue-lt:#e8f0fc;
+  --teal:#0f6e56;--teal-lt:#e1f5ee;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
-.topbar{background:var(--ink);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar{background:var(--ink);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:0.06em}
 .logo span{color:var(--gold)}
-.tabs{display:flex;background:var(--ink);border-top:1px solid rgba(255,255,255,0.07);padding:0 20px;flex-wrap:wrap}
-.tab{padding:10px 14px;font-size:11px;font-weight:500;color:rgba(255,255,255,0.35);cursor:pointer;letter-spacing:0.07em;border-bottom:2px solid transparent;text-transform:uppercase;transition:all 0.15s}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+.tabs{display:flex;background:var(--ink);border-top:1px solid rgba(255,255,255,0.07);padding:0 16px;flex-wrap:wrap;overflow-x:auto}
+.tab{padding:10px 14px;font-size:11px;font-weight:500;color:rgba(255,255,255,0.35);cursor:pointer;letter-spacing:0.07em;border-bottom:2px solid transparent;text-transform:uppercase;transition:all 0.15s;white-space:nowrap}
 .tab.on{color:var(--gold);border-color:var(--gold)}
-.page{display:none;padding:20px;flex-direction:column;gap:14px;max-width:700px;margin:0 auto}
+.page{display:none;padding:20px;flex-direction:column;gap:14px;max-width:720px;margin:0 auto}
 .page.on{display:flex}
 .lbl{font-size:10px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
 .card{background:var(--surf);border:0.5px solid var(--border);border-radius:12px;padding:16px}
+.card-hd{font-size:13px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
 input,select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);margin-top:4px}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--gold)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
 textarea{resize:vertical;min-height:70px;line-height:1.5}
+input[type=password]{letter-spacing:0.1em}
 .btn-p{width:100%;padding:11px;background:var(--ink);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;letter-spacing:0.03em;transition:background 0.15s}
 .btn-p:hover{background:#333}
 .btn-p.ok{background:var(--green)}
 .btn-p.gold{background:var(--gold-dk)}
-.btn-s{padding:7px 14px;border:0.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;background:var(--paper);color:var(--ink);cursor:pointer;transition:background 0.1s}
-.btn-s:hover{background:#ece8e0}
+.btn-s{padding:7px 14px;border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:11px;background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.1s}
+.btn-s:hover{background:rgba(255,255,255,0.08);color:#fff}
+.btn-s.dark{border-color:var(--border);background:var(--paper);color:var(--ink)}
+.btn-s.dark:hover{background:#ece8e0}
 .row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border)}
 .row:last-child{border-bottom:none}
 .row-name{font-size:13px;font-weight:500}
-.row-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.row-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
 .row-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-dk)}
 .del{padding:4px 10px;border:0.5px solid var(--red);border-radius:6px;color:var(--red);background:var(--red-lt);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0}
-.fr{margin-bottom:10px}
+.fr{margin-bottom:12px}
 .fr label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0.06em;text-transform:uppercase}
+.fr-hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
 .badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;display:inline-block}
 .badge.g{background:var(--green-lt);color:var(--green)}
 .badge.a{background:var(--gold-lt);color:var(--gold-dk)}
 .badge.r{background:var(--red-lt);color:var(--red)}
 .badge.b{background:var(--blue-lt);color:var(--blue)}
-.chat-wrap{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--paper);border-radius:10px;min-height:200px;max-height:400px;overflow-y:auto}
-.bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;max-width:85%}
+.chat-wrap{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--paper);border-radius:10px;min-height:220px;max-height:420px;overflow-y:auto}
+.bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;max-width:86%}
 .bubble.cust{background:var(--surf);border:0.5px solid var(--border);border-radius:12px 12px 12px 2px}
 .bubble.agent{background:var(--ink);color:#fff;border-radius:12px 12px 2px 12px;align-self:flex-end}
-.bubble.escalate{background:var(--red-lt);border:0.5px solid var(--red);border-radius:12px;color:var(--red)}
+.bubble.escalate{background:var(--red-lt);border:0.5px solid rgba(192,57,43,0.25);border-radius:10px;color:var(--red)}
 .bubble-meta{font-size:10px;color:var(--muted);margin-top:3px}
-.bubble.agent .bubble-meta{color:rgba(255,255,255,0.45);text-align:right}
+.bubble.agent .bubble-meta{color:rgba(255,255,255,0.4);text-align:right}
 .typing{display:flex;gap:4px;align-items:center;padding:4px 0}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:bounce 1.2s infinite}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);animation:bounce 1.2s infinite}
 .dot:nth-child(2){animation-delay:0.2s}
 .dot:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink)}
-.login-box{background:var(--surf);border-radius:14px;padding:32px;width:320px}
-.login-title{font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:4px}
-.login-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
-.stat-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:var(--paper);border-radius:8px;padding:12px}
-.stat-v{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1}
-.stat-l{font-size:10px;color:var(--muted);margin-top:2px}
+.login-box{background:var(--surf);border-radius:16px;padding:36px;width:340px}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--ink);margin-bottom:4px;letter-spacing:0.04em}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
 .tog{width:36px;height:20px;border-radius:10px;background:#ccc;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;display:inline-block}
 .tog.on{background:var(--green)}
 .tog::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform 0.2s}
 .tog.on::after{transform:translateX(16px)}
-.msg{font-size:12px;padding:8px 12px;border-radius:8px;margin-top:6px;display:none}
+.msg{font-size:12px;padding:8px 12px;border-radius:8px;margin-top:8px;display:none}
 .msg.ok{background:var(--green-lt);color:var(--green)}
 .msg.err{background:var(--red-lt);color:var(--red)}
+.key-status{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 9px;border-radius:10px;margin-top:6px}
+.key-status.set{background:var(--green-lt);color:var(--green)}
+.key-status.unset{background:var(--gold-lt);color:var(--gold-dk)}
+.quick-chip{padding:5px 12px;border:0.5px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;background:var(--surf);color:var(--ink);transition:all 0.1s;white-space:nowrap}
+.quick-chip:hover{border-color:var(--gold);color:var(--gold-dk)}
+.section-divider{height:0.5px;background:var(--border);margin:4px 0}
 </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
 <div class="login-wrap" id="login-screen">
   <div class="login-box">
     <div class="login-title">BARBER<span style="color:var(--gold)">PENDANT</span></div>
@@ -88,18 +98,20 @@ textarea{resize:vertical;min-height:70px;line-height:1.5}
              onkeydown="if(event.key==='Enter')login()"/>
     </div>
     <button class="btn-p" onclick="login()">Login</button>
-    <div class="msg err" id="login-err">Wrong password. Try again.</div>
+    <div class="msg err" id="login-err" style="display:none">Wrong password. Try again.</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:16px;text-align:center">Default password: barber123</div>
   </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="app" style="display:none">
   <div class="topbar">
     <div class="logo">BARBER<span>PENDANT</span>
-      <span style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;font-weight:400"> admin</span>
+      <span style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;font-weight:400;letter-spacing:0"> admin</span>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn-s" onclick="exportKB()" style="font-size:11px">Export JSON</button>
-      <button class="btn-s" onclick="importKB()" style="font-size:11px">Import JSON</button>
+    <div class="topbar-actions">
+      <button class="btn-s" onclick="exportKB()">Export JSON</button>
+      <button class="btn-s" onclick="importKB()">Import JSON</button>
       <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)"/>
     </div>
   </div>
@@ -113,106 +125,206 @@ textarea{resize:vertical;min-height:70px;line-height:1.5}
     <div class="tab"     onclick="go('settings')">Settings</div>
   </div>
 
+  <!-- SERVICES PAGE -->
   <div class="page on" id="pg-services">
     <div class="lbl">Current services</div>
     <div class="card" id="svc-list"></div>
+
     <div class="lbl">Add new service</div>
     <div class="card">
-      <div class="fr"><label>Key (no spaces)</label><input id="svc-key" placeholder="e.g. kids_colour"/></div>
-      <div class="fr"><label>Display name / description</label><input id="svc-desc" placeholder="e.g. Kids Hair Colour — gentle, under 10"/></div>
-      <div class="fr"><label>Price (₹)</label><input id="svc-price" placeholder="e.g. 150"/></div>
+      <div class="fr">
+        <label>Key (no spaces, lowercase)</label>
+        <input id="svc-key" placeholder="e.g. kids_colour"/>
+      </div>
+      <div class="fr">
+        <label>Description</label>
+        <input id="svc-desc" placeholder="e.g. Kids Hair Colour — gentle, under 10"/>
+      </div>
+      <div class="fr">
+        <label>Price (₹)</label>
+        <input id="svc-price" placeholder="e.g. 150"/>
+      </div>
       <button class="btn-p" onclick="addService()">Add service &amp; save</button>
-      <div class="msg ok" id="svc-msg">Saved!</div>
+      <div class="msg ok" id="svc-msg">Service saved!</div>
     </div>
   </div>
 
+  <!-- COMBOS PAGE -->
   <div class="page" id="pg-combos">
     <div class="lbl">Current combos</div>
     <div class="card" id="combo-list"></div>
-    <div class="lbl">Add combo</div>
+
+    <div class="lbl">Add combo deal</div>
     <div class="card">
-      <div class="fr"><label>Combo name</label><input id="c-name" placeholder="e.g. Full Refresh"/></div>
-      <div class="fr"><label>Original price (₹)</label><input id="c-orig" type="number" placeholder="190"/></div>
-      <div class="fr"><label>Combo price (₹)</label><input id="c-price" type="number" placeholder="150"/></div>
-      <div class="fr"><label>What's included</label><input id="c-inc" placeholder="e.g. haircut, beard trim, head massage"/></div>
-      <div class="fr"><label>Valid days (optional)</label><input id="c-valid" placeholder="e.g. Saturday and Sunday only"/></div>
+      <div class="fr">
+        <label>Combo name</label>
+        <input id="c-name" placeholder="e.g. Full Refresh"/>
+      </div>
+      <div class="fr">
+        <label>Original price (₹)</label>
+        <input id="c-orig" type="number" placeholder="190"/>
+      </div>
+      <div class="fr">
+        <label>Combo price (₹)</label>
+        <input id="c-price" type="number" placeholder="150"/>
+      </div>
+      <div class="fr">
+        <label>What's included (comma separated)</label>
+        <input id="c-inc" placeholder="e.g. haircut, beard trim, head massage"/>
+      </div>
+      <div class="fr">
+        <label>Valid days (optional)</label>
+        <input id="c-valid" placeholder="e.g. Saturday and Sunday only"/>
+      </div>
       <button class="btn-p" onclick="addCombo()">Add combo &amp; save</button>
-      <div class="msg ok" id="combo-msg">Saved!</div>
+      <div class="msg ok" id="combo-msg">Combo saved!</div>
     </div>
   </div>
 
+  <!-- DISCOUNTS PAGE -->
   <div class="page" id="pg-discounts">
-    <div class="lbl">Active discounts</div>
+    <div class="lbl">Active discount rules</div>
     <div class="card" id="disc-list"></div>
+
     <div class="lbl">Add discount rule</div>
     <div class="card">
-      <div class="fr"><label>Discount name</label><input id="d-name" placeholder="e.g. Student discount"/></div>
-      <div class="fr"><label>Discount value</label><input id="d-val" placeholder="e.g. 10 percent off any service"/></div>
-      <div class="fr"><label>Trigger phrases (comma separated)</label>
-        <input id="d-trig" placeholder="e.g. student, college, studying"/></div>
-      <div class="fr"><label>Active?</label>
+      <div class="fr">
+        <label>Discount name</label>
+        <input id="d-name" placeholder="e.g. Student discount"/>
+      </div>
+      <div class="fr">
+        <label>Discount value</label>
+        <input id="d-val" placeholder="e.g. 10 percent off any service"/>
+      </div>
+      <div class="fr">
+        <label>Trigger phrases (comma separated)</label>
+        <input id="d-trig" placeholder="e.g. student, college, studying"/>
+        <div class="fr-hint">Agent applies this discount when customer says any of these phrases</div>
+      </div>
+      <div class="fr">
+        <label>Active now?</label>
         <div style="margin-top:8px"><div class="tog on" id="d-active" onclick="this.classList.toggle('on')"></div></div>
       </div>
       <button class="btn-p" onclick="addDiscount()">Add discount &amp; save</button>
-      <div class="msg ok" id="disc-msg">Saved!</div>
+      <div class="msg ok" id="disc-msg">Discount saved!</div>
     </div>
   </div>
 
+  <!-- Q&A PAGE -->
   <div class="page" id="pg-qa">
     <div class="lbl">Custom Q &amp; A pairs</div>
     <div class="card" id="qa-list"></div>
-    <div class="lbl">Add Q &amp; A</div>
+
+    <div class="lbl">Add Q &amp; A pair</div>
     <div class="card">
-      <div class="fr"><label>If customer asks about...</label>
-        <input id="q-q" placeholder="e.g. do you do facials, any kids offer"/></div>
-      <div class="fr"><label>Agent says...</label>
-        <textarea id="q-a" placeholder="e.g. Yes we do basic facials for ₹150, takes about 20 minutes. Want to add it on?"></textarea></div>
+      <div class="fr">
+        <label>If customer asks about...</label>
+        <input id="q-q" placeholder="e.g. do you do facials, WiFi password, parking"/>
+      </div>
+      <div class="fr">
+        <label>Agent replies...</label>
+        <textarea id="q-a" placeholder="e.g. Yes we do basic facials for ₹150, takes about 20 minutes. Want to add it on today?"></textarea>
+      </div>
       <button class="btn-p" onclick="addQA()">Save Q &amp; A</button>
-      <div class="msg ok" id="qa-msg">Saved!</div>
+      <div class="msg ok" id="qa-msg">Q&amp;A saved!</div>
     </div>
   </div>
 
+  <!-- TEST AGENT PAGE -->
   <div class="page" id="pg-test">
+    <div id="key-warning" style="display:none;background:var(--gold-lt);border:0.5px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--gold-dk)">
+      Anthropic API key not set. Go to <strong>Settings → API keys</strong> and add your key first.
+    </div>
+
     <div class="lbl">Test your agent — type as a customer</div>
     <div class="card" style="padding:0;overflow:hidden">
       <div class="chat-wrap" id="chat"></div>
       <div style="display:flex;gap:8px;padding:12px;border-top:0.5px solid var(--border)">
-        <input id="test-input" placeholder="Type in any language — Tamil, Hindi, Telugu..."
+        <input id="test-input" placeholder="Type in any language — Tamil, Hindi, Telugu, Kannada..."
                onkeydown="if(event.key==='Enter')sendTest()"
                style="margin-top:0;flex:1"/>
-        <button class="btn-s" onclick="sendTest()">Send</button>
-        <button class="btn-s" onclick="clearChat()">Clear</button>
+        <button class="btn-s dark" onclick="sendTest()">Send</button>
+        <button class="btn-s dark" onclick="clearChat()">Clear</button>
       </div>
     </div>
-    <div class="card" style="padding:12px">
-      <div class="lbl" style="margin-bottom:8px">Quick test phrases</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px" id="quick-tests"></div>
-    </div>
-    <div class="fr" style="background:var(--surf);border:0.5px solid var(--border);border-radius:12px;padding:14px">
-      <label>Anthropic API key (for browser testing)</label>
-      <input type="password" id="api-key" placeholder="sk-ant-..." 
-             value="" oninput="saveKey()"/>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px">
-        Stored in browser only — never sent anywhere except Anthropic API directly
+
+    <div class="lbl">Quick test phrases</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px" id="quick-tests"></div>
+
+    <div class="card" style="padding:12px 14px">
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">
+        <strong style="color:var(--ink)">How it works:</strong> Agent answers prices, combos, discounts and salon info automatically in the customer's language. Styling instructions and unknown topics escalate to staff.
       </div>
     </div>
   </div>
 
+  <!-- SETTINGS PAGE -->
   <div class="page" id="pg-settings">
+
+    <!-- API KEYS SECTION -->
+    <div class="lbl">API keys</div>
+    <div class="card">
+      <div class="card-hd">API keys <span class="badge b">Stored in browser only</span></div>
+
+      <div class="fr">
+        <label>Anthropic API key</label>
+        <input type="password" id="anthropic-key" placeholder="sk-ant-..."/>
+        <div id="anthropic-status" class="key-status unset">Not set</div>
+        <div class="fr-hint">
+          Get from <strong>console.anthropic.com</strong> → API Keys → Create new key
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="fr" style="margin-top:12px">
+        <label>ElevenLabs API key</label>
+        <input type="password" id="eleven-key" placeholder="your-elevenlabs-key..."/>
+        <div id="eleven-status" class="key-status unset">Not set</div>
+        <div class="fr-hint">
+          Get from <strong>elevenlabs.io</strong> → click your profile icon top right → API Key
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="fr" style="margin-top:12px">
+        <label>ElevenLabs Voice ID</label>
+        <input type="text" id="eleven-voice" placeholder="pNInz6obpgDQGcFmaJgB"/>
+        <div class="fr-hint">
+          Get from <strong>elevenlabs.io</strong> → Voices → click any voice → copy the ID shown below the name.<br/>
+          Default (Adam — works well for all Indian languages): <code style="background:var(--paper);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">pNInz6obpgDQGcFmaJgB</code>
+        </div>
+      </div>
+
+      <button class="btn-p" onclick="saveKeys()">Save API keys</button>
+      <div class="msg ok" id="keys-msg">API keys saved in browser!</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+        Keys are stored only in your browser localStorage. They are never sent to GitHub or any server — only directly to Anthropic and ElevenLabs APIs.
+      </div>
+    </div>
+
+    <!-- SALON INFO SECTION -->
     <div class="lbl">Salon info</div>
     <div class="card">
       <div class="fr"><label>Salon name</label><input id="s-name" placeholder="Budget Barber"/></div>
-      <div class="fr"><label>Opening hours</label><input id="s-hours" placeholder="9AM to 8PM, all days"/></div>
+      <div class="fr"><label>Opening hours</label><input id="s-hours" placeholder="9AM to 8PM, all days including Sundays"/></div>
       <div class="fr"><label>Payment methods</label><input id="s-pay" placeholder="Cash, Google Pay, PhonePe"/></div>
-      <div class="fr"><label>Address</label><input id="s-addr" placeholder="Your address"/></div>
+      <div class="fr"><label>Address / location</label><input id="s-addr" placeholder="Your salon address"/></div>
       <button class="btn-p" onclick="saveSalon()">Save salon info</button>
-      <div class="msg ok" id="salon-msg">Saved!</div>
+      <div class="msg ok" id="salon-msg">Salon info saved!</div>
     </div>
 
+    <!-- AGENT SETTINGS SECTION -->
     <div class="lbl">Agent settings</div>
     <div class="card">
-      <div class="fr"><label>Agent name</label><input id="ag-name" placeholder="e.g. Kumar"/></div>
-      <div class="fr"><label>Agent voice style</label>
+      <div class="fr">
+        <label>Agent name</label>
+        <input id="ag-name" placeholder="e.g. Kumar"/>
+        <div class="fr-hint">This is the name the agent uses when speaking to customers</div>
+      </div>
+      <div class="fr">
+        <label>Voice style</label>
         <select id="ag-style">
           <option>Friendly and warm</option>
           <option>Formal and professional</option>
@@ -220,45 +332,66 @@ textarea{resize:vertical;min-height:70px;line-height:1.5}
         </select>
       </div>
       <div class="row">
-        <div><div style="font-size:13px">Upsell combos when relevant</div>
-          <div style="font-size:11px;color:var(--muted)">Agent suggests combos when customer asks single service price</div></div>
+        <div>
+          <div style="font-size:13px;font-weight:500">Upsell combos when relevant</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Agent suggests combos when customer asks for a single service price</div>
+        </div>
         <div class="tog on" id="tog-upsell" onclick="this.classList.toggle('on')"></div>
       </div>
       <div class="row">
-        <div><div style="font-size:13px">Announce discounts at session start</div>
-          <div style="font-size:11px;color:var(--muted)">Agent greets customer and mentions active offers</div></div>
+        <div>
+          <div style="font-size:13px;font-weight:500">Announce discounts at session start</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Agent greets new customer and mentions active offers</div>
+        </div>
         <div class="tog" id="tog-announce" onclick="this.classList.toggle('on')"></div>
       </div>
-      <button class="btn-p" onclick="saveSettings()">Save agent settings</button>
-      <div class="msg ok" id="settings-msg">Saved!</div>
+      <button class="btn-p" onclick="saveAgentSettings()">Save agent settings</button>
+      <div class="msg ok" id="agent-msg">Agent settings saved!</div>
     </div>
 
+    <!-- ADMIN PASSWORD SECTION -->
     <div class="lbl">Admin password</div>
     <div class="card">
-      <div class="fr"><label>New password</label><input type="password" id="new-pass" placeholder="Enter new password"/></div>
+      <div class="fr">
+        <label>New password</label>
+        <input type="password" id="new-pass" placeholder="Enter new password"/>
+      </div>
+      <div class="fr">
+        <label>Confirm new password</label>
+        <input type="password" id="new-pass2" placeholder="Repeat new password"/>
+      </div>
       <button class="btn-p" onclick="changePass()">Change password</button>
-      <div class="msg ok" id="pass-msg">Password changed!</div>
+      <div class="msg ok"  id="pass-msg">Password changed!</div>
+      <div class="msg err" id="pass-err" style="display:none">Passwords do not match</div>
     </div>
 
+    <!-- DANGER ZONE -->
     <div class="lbl">Danger zone</div>
     <div class="card">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">This will delete all your services, combos, discounts and Q&A and restore the default data.</div>
       <button class="btn-p" style="background:var(--red)" onclick="resetAll()">Reset all knowledge base data</button>
     </div>
   </div>
 </div>
 
 <script>
-const PASS_KEY   = 'bp_password';
-const KB_KEY     = 'bp_kb';
-const APIKEY_KEY = 'bp_apikey';
+const PASS_KEY    = 'bp_password';
+const KB_KEY      = 'bp_kb';
+const APIKEY_KEY  = 'bp_apikey';
+const ELEVENKEY   = 'bp_elevenkey';
+const VOICEID_KEY = 'bp_voiceid';
 const DEFAULT_PASS = 'barber123';
 
 let chatHistory = [];
 
 const DEFAULT_KB = {
-  salon: {name:"Budget Barber",hours:"9AM to 8PM, all days including Sundays",
-          payment:"Cash, Google Pay, PhonePe",location:"Your address here"},
-  services: {
+  salon:{
+    name:"Budget Barber",
+    hours:"9AM to 8PM, all days including Sundays",
+    payment:"Cash, Google Pay, PhonePe",
+    location:"Your address here"
+  },
+  services:{
     haircut:     {price:80,   desc:"Regular scissor or machine cut, any length"},
     kids_cut:    {price:60,   desc:"For children under 10 years"},
     beard_trim:  {price:50,   desc:"Shape and define, razor finish included"},
@@ -266,48 +399,52 @@ const DEFAULT_KB = {
     head_massage:{price:40,   desc:"10-minute oil massage, available as add-on"},
     hair_colour: {price:"200+",desc:"Depends on hair length and colour type"}
   },
-  combos: [
-    {name:"The Works",      price:150,original:190,includes:["haircut","beard trim","head massage"]},
-    {name:"Clean and Sharp",price:110,original:140,includes:["haircut","full shave"]},
-    {name:"Weekend Special",price:60, original:80, includes:["haircut"],valid:"Saturday and Sunday only"}
+  combos:[
+    {name:"The Works",       price:150, original:190, includes:["haircut","beard trim","head massage"]},
+    {name:"Clean and Sharp", price:110, original:140, includes:["haircut","full shave"]},
+    {name:"Weekend Special", price:60,  original:80,  includes:["haircut"], valid:"Saturday and Sunday only"}
   ],
-  discounts: [
-    {name:"First visit",  value:"20 percent off any service",   triggers:["first time","new here","pehli baar","mudhal murai"],active:true},
-    {name:"Loyalty",      value:"free haircut on 5th visit",    triggers:["regular","always come","every week","loyalty"],active:true},
-    {name:"Senior",       value:"20 rupees off all services",   triggers:["senior","old age","aged"],active:false}
+  discounts:[
+    {name:"First visit",  value:"20 percent off any service",  triggers:["first time","new here","pehli baar","mudhal murai","first visit"], active:true},
+    {name:"Loyalty",      value:"free haircut on 5th visit",   triggers:["regular","always come","every week","loyalty"],                    active:true},
+    {name:"Senior",       value:"20 rupees off all services",  triggers:["senior","old age","aged"],                                         active:false}
   ],
-  qa: [
+  qa:[
     {q:"waiting time",  a:"Usually 10 to 15 minutes if someone is ahead of you."},
     {q:"appointment",   a:"Walk-in only, no appointment needed."},
     {q:"parking",       a:"Free parking right outside."},
     {q:"payment",       a:"We accept cash, Google Pay and PhonePe."}
   ],
-  agent: {name:"Kumar",style:"Friendly and warm",upsell:true,announce:false}
+  agent:{name:"Kumar", style:"Friendly and warm", upsell:true, announce:false}
 };
 
-const QUICK = [
+const QUICK_PHRASES = [
   "Haircut ku evvalavu?",
   "Haircut ki price cheppandi",
   "Koi combo offer hai?",
-  "First time aa raha hoon",
-  "Weekend offer enna?",
+  "Pehli baar aa raha hoon",
+  "Weekend offer enna irukku?",
   "Waiting time kitna hai?",
   "Do you accept Google Pay?",
-  "Side mein aur short karo"
+  "Any discount for today?",
+  "Side mein aur short karo",
+  "Yavudadru combo idiya?"
 ];
 
-function getKB(){ return JSON.parse(localStorage.getItem(KB_KEY)||JSON.stringify(DEFAULT_KB)) }
-function setKB(kb){ localStorage.setItem(KB_KEY, JSON.stringify(kb)) }
-function getPass(){ return localStorage.getItem(PASS_KEY)||DEFAULT_PASS }
+function getKB(){ return JSON.parse(localStorage.getItem(KB_KEY) || JSON.stringify(DEFAULT_KB)); }
+function setKB(kb){ localStorage.setItem(KB_KEY, JSON.stringify(kb)); }
+function getPass(){ return localStorage.getItem(PASS_KEY) || DEFAULT_PASS; }
 
 function login(){
   const p = document.getElementById('pass').value;
   if(p === getPass()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
     init();
   } else {
-    showMsg('login-err', false);
+    const err = document.getElementById('login-err');
+    err.style.display = 'block';
+    setTimeout(()=> err.style.display='none', 3000);
   }
 }
 
@@ -315,15 +452,17 @@ function init(){
   renderAll();
   loadSettings();
   buildQuickTests();
-  const savedKey = localStorage.getItem(APIKEY_KEY)||'';
-  document.getElementById('api-key').value = savedKey;
+  loadKeys();
+  updateKeyStatuses();
+  checkKeyWarning();
 }
 
 function go(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
   document.getElementById('pg-'+id).classList.add('on');
   event.target.classList.add('on');
+  if(id === 'test') checkKeyWarning();
 }
 
 function renderAll(){ renderServices(); renderCombos(); renderDiscounts(); renderQA(); }
@@ -331,79 +470,83 @@ function renderAll(){ renderServices(); renderCombos(); renderDiscounts(); rende
 function renderServices(){
   const kb = getKB();
   const el = document.getElementById('svc-list');
-  const entries = Object.entries(kb.services||{});
-  el.innerHTML = entries.length ? entries.map(([k,s])=>`
-    <div class="row">
-      <div>
-        <div class="row-name">${s.desc||k}</div>
-        <div class="row-sub" style="font-family:'DM Mono',monospace;font-size:10px">${k}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="row-price">&#8377;${s.price}</div>
-        <button class="del" onclick="delService('${k}')">Remove</button>
-      </div>
-    </div>`).join('')
-  : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No services yet — add one below</div>';
+  const entries = Object.entries(kb.services || {});
+  el.innerHTML = entries.length
+    ? entries.map(([k,s]) => `
+        <div class="row">
+          <div style="flex:1;min-width:0">
+            <div class="row-name">${s.desc || k}</div>
+            <div class="row-sub" style="font-family:'DM Mono',monospace;font-size:10px">${k}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <div class="row-price">&#8377;${s.price}</div>
+            <button class="del" onclick="delService('${k}')">Remove</button>
+          </div>
+        </div>`).join('')
+    : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No services yet — add one below</div>';
 }
 
 function renderCombos(){
   const kb = getKB();
   const el = document.getElementById('combo-list');
-  el.innerHTML = (kb.combos||[]).length ? (kb.combos||[]).map((c,i)=>`
-    <div class="row">
-      <div>
-        <div class="row-name">${c.name}</div>
-        <div class="row-sub">${(c.includes||[]).join(' + ')}${c.valid?' · <span class="badge a">'+c.valid+'</span>':''}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div>
-          <div style="text-decoration:line-through;font-size:11px;color:var(--muted)">&#8377;${c.original}</div>
-          <div class="row-price">&#8377;${c.price}</div>
-        </div>
-        <button class="del" onclick="delCombo(${i})">Remove</button>
-      </div>
-    </div>`).join('')
-  : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No combos yet</div>';
+  el.innerHTML = (kb.combos||[]).length
+    ? (kb.combos||[]).map((c,i) => `
+        <div class="row">
+          <div style="flex:1;min-width:0">
+            <div class="row-name">${c.name}</div>
+            <div class="row-sub">${(c.includes||[]).join(' + ')}${c.valid ? ' &nbsp;<span class="badge a">'+c.valid+'</span>' : ''}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <div style="text-align:right">
+              <div style="text-decoration:line-through;font-size:11px;color:var(--muted)">&#8377;${c.original}</div>
+              <div class="row-price">&#8377;${c.price}</div>
+            </div>
+            <button class="del" onclick="delCombo(${i})">Remove</button>
+          </div>
+        </div>`).join('')
+    : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No combos yet — add one below</div>';
 }
 
 function renderDiscounts(){
   const kb = getKB();
   const el = document.getElementById('disc-list');
-  el.innerHTML = (kb.discounts||[]).length ? (kb.discounts||[]).map((d,i)=>`
-    <div class="row">
-      <div style="flex:1">
-        <div class="row-name">${d.name} <span class="badge ${d.active?'g':'r'}">${d.active?'Active':'Inactive'}</span></div>
-        <div class="row-sub">${d.value}</div>
-        <div class="row-sub" style="margin-top:2px">Triggers: ${(d.triggers||[]).join(', ')}</div>
-      </div>
-      <button class="del" onclick="delDiscount(${i})" style="margin-left:10px">Remove</button>
-    </div>`).join('')
-  : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No discounts yet</div>';
+  el.innerHTML = (kb.discounts||[]).length
+    ? (kb.discounts||[]).map((d,i) => `
+        <div class="row">
+          <div style="flex:1;min-width:0">
+            <div class="row-name">${d.name} &nbsp;<span class="badge ${d.active?'g':'r'}">${d.active?'Active':'Inactive'}</span></div>
+            <div class="row-sub">${d.value}</div>
+            <div class="row-sub" style="margin-top:3px">Triggers: ${(d.triggers||[]).join(', ')}</div>
+          </div>
+          <button class="del" onclick="delDiscount(${i})" style="margin-left:10px;flex-shrink:0">Remove</button>
+        </div>`).join('')
+    : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No discounts yet — add one below</div>';
 }
 
 function renderQA(){
   const kb = getKB();
   const el = document.getElementById('qa-list');
-  el.innerHTML = (kb.qa||[]).length ? (kb.qa||[]).map((q,i)=>`
-    <div class="row">
-      <div style="flex:1">
-        <div class="row-name">${q.q}</div>
-        <div class="row-sub">${q.a}</div>
-      </div>
-      <button class="del" onclick="delQA(${i})" style="margin-left:10px">Remove</button>
-    </div>`).join('')
-  : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No Q&A yet</div>';
+  el.innerHTML = (kb.qa||[]).length
+    ? (kb.qa||[]).map((q,i) => `
+        <div class="row">
+          <div style="flex:1;min-width:0">
+            <div class="row-name">${q.q}</div>
+            <div class="row-sub">${q.a}</div>
+          </div>
+          <button class="del" onclick="delQA(${i})" style="margin-left:10px;flex-shrink:0">Remove</button>
+        </div>`).join('')
+    : '<div style="color:var(--muted);font-size:13px;padding:8px 0">No Q&A yet — add one below</div>';
 }
 
 function addService(){
   const key   = document.getElementById('svc-key').value.trim().replace(/\s+/g,'_').toLowerCase();
   const desc  = document.getElementById('svc-desc').value.trim();
   const price = document.getElementById('svc-price').value.trim();
-  if(!key||!desc||!price){ alert('Fill all fields'); return; }
+  if(!key||!desc||!price){ alert('Please fill all three fields'); return; }
   const kb = getKB();
   kb.services[key] = {price, desc};
   setKB(kb); renderServices();
-  ['svc-key','svc-desc','svc-price'].forEach(id=>document.getElementById(id).value='');
+  ['svc-key','svc-desc','svc-price'].forEach(id => document.getElementById(id).value = '');
   showMsg('svc-msg');
 }
 
@@ -414,15 +557,15 @@ function delService(key){
 
 function addCombo(){
   const name  = document.getElementById('c-name').value.trim();
-  const orig  = parseInt(document.getElementById('c-orig').value)||0;
-  const price = parseInt(document.getElementById('c-price').value)||0;
+  const orig  = parseInt(document.getElementById('c-orig').value) || 0;
+  const price = parseInt(document.getElementById('c-price').value) || 0;
   const inc   = document.getElementById('c-inc').value.split(',').map(s=>s.trim()).filter(Boolean);
   const valid = document.getElementById('c-valid').value.trim();
-  if(!name||!price){ alert('Fill name and price'); return; }
+  if(!name||!price){ alert('Fill at least combo name and price'); return; }
   const kb = getKB();
-  kb.combos.push({name,original:orig,price,includes:inc,valid:valid||undefined});
+  kb.combos.push({name, original:orig, price, includes:inc, valid:valid||undefined});
   setKB(kb); renderCombos();
-  ['c-name','c-orig','c-price','c-inc','c-valid'].forEach(id=>document.getElementById(id).value='');
+  ['c-name','c-orig','c-price','c-inc','c-valid'].forEach(id => document.getElementById(id).value = '');
   showMsg('combo-msg');
 }
 
@@ -435,11 +578,11 @@ function addDiscount(){
   const value  = document.getElementById('d-val').value.trim();
   const trigs  = document.getElementById('d-trig').value.split(',').map(s=>s.trim()).filter(Boolean);
   const active = document.getElementById('d-active').classList.contains('on');
-  if(!name||!value){ alert('Fill name and value'); return; }
+  if(!name||!value){ alert('Fill discount name and value'); return; }
   const kb = getKB();
-  kb.discounts.push({name,value,triggers:trigs,active});
+  kb.discounts.push({name, value, triggers:trigs, active});
   setKB(kb); renderDiscounts();
-  ['d-name','d-val','d-trig'].forEach(id=>document.getElementById(id).value='');
+  ['d-name','d-val','d-trig'].forEach(id => document.getElementById(id).value = '');
   showMsg('disc-msg');
 }
 
@@ -450,12 +593,12 @@ function delDiscount(i){
 function addQA(){
   const q = document.getElementById('q-q').value.trim();
   const a = document.getElementById('q-a').value.trim();
-  if(!q||!a){ alert('Fill both fields'); return; }
+  if(!q||!a){ alert('Fill both question and answer'); return; }
   const kb = getKB();
-  kb.qa.push({q,a});
+  kb.qa.push({q, a});
   setKB(kb); renderQA();
-  document.getElementById('q-q').value='';
-  document.getElementById('q-a').value='';
+  document.getElementById('q-q').value = '';
+  document.getElementById('q-a').value = '';
   showMsg('qa-msg');
 }
 
@@ -465,16 +608,19 @@ function delQA(i){
 
 function loadSettings(){
   const kb = getKB();
-  const s  = kb.salon||{};
-  const ag = kb.agent||{};
-  document.getElementById('s-name').value  = s.name||'';
-  document.getElementById('s-hours').value = s.hours||'';
-  document.getElementById('s-pay').value   = s.payment||'';
-  document.getElementById('s-addr').value  = s.location||'';
-  document.getElementById('ag-name').value = ag.name||'Kumar';
-  document.getElementById('ag-style').value= ag.style||'Friendly and warm';
+  const s  = kb.salon  || {};
+  const ag = kb.agent  || {};
+  document.getElementById('s-name').value  = s.name     || '';
+  document.getElementById('s-hours').value = s.hours    || '';
+  document.getElementById('s-pay').value   = s.payment  || '';
+  document.getElementById('s-addr').value  = s.location || '';
+  document.getElementById('ag-name').value = ag.name    || 'Kumar';
+  const styleEl = document.getElementById('ag-style');
+  if(ag.style) styleEl.value = ag.style;
   if(ag.upsell)    document.getElementById('tog-upsell').classList.add('on');
+  else             document.getElementById('tog-upsell').classList.remove('on');
   if(ag.announce)  document.getElementById('tog-announce').classList.add('on');
+  else             document.getElementById('tog-announce').classList.remove('on');
 }
 
 function saveSalon(){
@@ -488,39 +634,83 @@ function saveSalon(){
   setKB(kb); showMsg('salon-msg');
 }
 
-function saveSettings(){
+function saveAgentSettings(){
   const kb = getKB();
   kb.agent = {
-    name:     document.getElementById('ag-name').value.trim(),
+    name:     document.getElementById('ag-name').value.trim() || 'Kumar',
     style:    document.getElementById('ag-style').value,
     upsell:   document.getElementById('tog-upsell').classList.contains('on'),
     announce: document.getElementById('tog-announce').classList.contains('on')
   };
-  setKB(kb); showMsg('settings-msg');
+  setKB(kb); showMsg('agent-msg');
+}
+
+function loadKeys(){
+  const ak = localStorage.getItem(APIKEY_KEY) || '';
+  const ek = localStorage.getItem(ELEVENKEY)   || '';
+  const vi = localStorage.getItem(VOICEID_KEY) || 'pNInz6obpgDQGcFmaJgB';
+  document.getElementById('anthropic-key').value = ak;
+  document.getElementById('eleven-key').value    = ek;
+  document.getElementById('eleven-voice').value  = vi;
+}
+
+function saveKeys(){
+  const ak = document.getElementById('anthropic-key').value.trim();
+  const ek = document.getElementById('eleven-key').value.trim();
+  const vi = document.getElementById('eleven-voice').value.trim() || 'pNInz6obpgDQGcFmaJgB';
+  localStorage.setItem(APIKEY_KEY,  ak);
+  localStorage.setItem(ELEVENKEY,   ek);
+  localStorage.setItem(VOICEID_KEY, vi);
+  updateKeyStatuses();
+  showMsg('keys-msg');
+}
+
+function updateKeyStatuses(){
+  const ak = localStorage.getItem(APIKEY_KEY) || '';
+  const ek = localStorage.getItem(ELEVENKEY)  || '';
+  const aEl = document.getElementById('anthropic-status');
+  const eEl = document.getElementById('eleven-status');
+  if(aEl){
+    aEl.textContent = ak ? 'Set' : 'Not set';
+    aEl.className   = 'key-status ' + (ak ? 'set' : 'unset');
+  }
+  if(eEl){
+    eEl.textContent = ek ? 'Set' : 'Not set';
+    eEl.className   = 'key-status ' + (ek ? 'set' : 'unset');
+  }
+}
+
+function checkKeyWarning(){
+  const ak  = localStorage.getItem(APIKEY_KEY) || '';
+  const el  = document.getElementById('key-warning');
+  if(el) el.style.display = ak ? 'none' : 'block';
 }
 
 function changePass(){
-  const p = document.getElementById('new-pass').value.trim();
-  if(!p){ alert('Enter a password'); return; }
-  localStorage.setItem(PASS_KEY, p);
-  document.getElementById('new-pass').value='';
+  const p1 = document.getElementById('new-pass').value.trim();
+  const p2 = document.getElementById('new-pass2').value.trim();
+  if(!p1){ alert('Enter a new password'); return; }
+  if(p1 !== p2){
+    document.getElementById('pass-err').style.display = 'block';
+    setTimeout(()=> document.getElementById('pass-err').style.display='none', 3000);
+    return;
+  }
+  localStorage.setItem(PASS_KEY, p1);
+  document.getElementById('new-pass').value  = '';
+  document.getElementById('new-pass2').value = '';
   showMsg('pass-msg');
 }
 
 function resetAll(){
-  if(!confirm('This will delete all your services, combos and discounts. Sure?')) return;
+  if(!confirm('This will delete ALL your services, combos, discounts and Q&A and restore defaults. Sure?')) return;
   localStorage.removeItem(KB_KEY);
   renderAll(); loadSettings();
-  alert('Reset complete — default data restored.');
-}
-
-function saveKey(){
-  localStorage.setItem(APIKEY_KEY, document.getElementById('api-key').value.trim());
+  alert('Reset complete. Default data restored.');
 }
 
 function exportKB(){
   const kb   = getKB();
-  const blob = new Blob([JSON.stringify(kb,null,2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify(kb, null, 2)], {type:'application/json'});
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(blob);
   a.download = 'knowledge_base.json';
@@ -541,18 +731,19 @@ function handleImport(e){
       setKB(kb); renderAll(); loadSettings();
       alert('Knowledge base imported successfully!');
     } catch {
-      alert('Invalid JSON file');
+      alert('Invalid JSON file. Please check the file and try again.');
     }
   };
   reader.readAsText(file);
+  e.target.value = '';
 }
 
 function buildQuickTests(){
   const el = document.getElementById('quick-tests');
-  el.innerHTML = QUICK.map(q=>`
-    <div style="padding:5px 12px;border:0.5px solid var(--border);border-radius:20px;
-                font-size:12px;cursor:pointer;background:var(--surf)"
-         onclick="quickTest('${q}')">${q}</div>`).join('');
+  el.innerHTML = QUICK_PHRASES.map(q => `
+    <div class="quick-chip" onclick="quickTest('${q.replace(/'/g,"\\'")}')">
+      ${q}
+    </div>`).join('');
 }
 
 function quickTest(text){
@@ -572,7 +763,7 @@ function addBubble(text, type, meta=''){
 function addTyping(){
   const chat = document.getElementById('chat');
   const div  = document.createElement('div');
-  div.id = 'typing';
+  div.id = 'typing-indicator';
   div.className = 'bubble agent';
   div.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
   chat.appendChild(div);
@@ -580,12 +771,12 @@ function addTyping(){
 }
 
 function removeTyping(){
-  const t = document.getElementById('typing');
+  const t = document.getElementById('typing-indicator');
   if(t) t.remove();
 }
 
 function clearChat(){
-  document.getElementById('chat').innerHTML='';
+  document.getElementById('chat').innerHTML = '';
   chatHistory = [];
 }
 
@@ -595,9 +786,9 @@ async function sendTest(){
   if(!text) return;
   inp.value = '';
 
-  const apiKey = localStorage.getItem(APIKEY_KEY)||'';
+  const apiKey = localStorage.getItem(APIKEY_KEY) || '';
   if(!apiKey){
-    addBubble('Please add your Anthropic API key in the Settings tab first.','escalate');
+    addBubble('Anthropic API key not set. Go to Settings → API keys and add your key.', 'escalate');
     return;
   }
 
@@ -605,25 +796,30 @@ async function sendTest(){
   addTyping();
 
   const kb = getKB();
-  const ag = kb.agent||{};
+  const ag = kb.agent || {};
 
-  const SYSTEM = `FIRST: Detect the language the customer is using and reply ONLY in that exact language.
-If Tamil → Tamil only. If Telugu → Telugu only. If Hindi → Hindi only. If Kannada → Kannada only. If English → English only.
-Never mix languages. Never default to Hindi.
+  const SYSTEM = `FIRST and MOST IMPORTANT RULE: Detect the exact language the customer is using and reply ONLY in that same language.
+- Customer speaks Tamil → reply in Tamil only
+- Customer speaks Telugu → reply in Telugu only
+- Customer speaks Hindi → reply in Hindi only
+- Customer speaks Kannada → reply in Kannada only
+- Customer speaks Malayalam → reply in Malayalam only
+- Customer speaks English → reply in English only
+Never reply in a different language. Never default to Hindi. Never mix languages.
 
-You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'} barber salon.
+You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly and warm').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'} barber salon in India.
 
-KNOWLEDGE BASE:
+COMPLETE KNOWLEDGE BASE:
 ${JSON.stringify(kb, null, 2)}
 
-RULES:
-1. Answer prices, services, combos, discounts, hours, payment, waiting time yourself.
-2. ${ag.upsell?'Suggest relevant combos when customer asks for a single service price.':'Do not upsell.'}
-3. Apply discounts automatically when customer matches trigger phrases.
-4. For styling instructions or anything NOT in knowledge base reply exactly:
-   ESCALATE: <one polite sentence in customer language asking them to wait for staff>
-5. Keep reply to 1-3 sentences — this will be spoken aloud.
-6. Sound warm and natural, not robotic.`;
+YOUR RULES:
+1. Answer questions about prices, services, combos, discounts, hours, payment, waiting time, and anything in the knowledge base yourself.
+2. ${ag.upsell ? 'When customer asks about a single service, naturally mention a relevant combo deal if one exists.' : 'Do not suggest combos unless asked.'}
+3. Apply discounts automatically — when customer says anything matching the trigger phrases, offer that discount.
+4. For styling instructions, complaints about the cut, or anything NOT in the knowledge base, reply ONLY with:
+   ESCALATE: <one short polite sentence in the customer's language telling them staff will help>
+5. Keep all replies to 1-3 sentences maximum. This will be spoken aloud by a voice assistant.
+6. Sound warm, natural and human — not robotic.`;
 
   try {
     chatHistory.push({role:'user', content: text});
@@ -631,50 +827,55 @@ RULES:
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
+        'Content-Type':  'application/json',
+        'x-api-key':     apiKey,
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 150,
-        system: SYSTEM,
-        messages: chatHistory
+        model:      'claude-haiku-4-5-20251001',
+        max_tokens: 160,
+        system:     SYSTEM,
+        messages:   chatHistory
       })
     });
 
     const data  = await resp.json();
-    const reply = data.content?.[0]?.text?.trim()||'Sorry, something went wrong.';
-    chatHistory.push({role:'assistant', content: reply});
+    if(data.error){
+      removeTyping();
+      addBubble('API error: ' + data.error.message, 'escalate');
+      return;
+    }
 
+    const reply = data.content?.[0]?.text?.trim() || 'Sorry, something went wrong.';
+    chatHistory.push({role:'assistant', content: reply});
     removeTyping();
 
     if(reply.startsWith('ESCALATE:')){
       const bridge = reply.replace('ESCALATE:','').trim();
-      addBubble(bridge, 'agent', 'Kumar · routing to staff');
-      addBubble('Staff sees translation of customer message here', 'escalate', 'Escalated to staff');
+      addBubble(bridge, 'agent', `${ag.name||'Kumar'} · routing to staff`);
+      addBubble('Staff receives translation of customer message in their language', 'escalate', 'Escalated to staff — translation mode active');
     } else {
-      addBubble(reply, 'agent', 'Kumar (agent)');
+      addBubble(reply, 'agent', `${ag.name||'Kumar'} (agent)`);
     }
 
-  } catch(err) {
+  } catch(err){
     removeTyping();
-    addBubble('API error: ' + err.message, 'escalate');
+    addBubble('Network error: ' + err.message + '. Check your API key and internet connection.', 'escalate');
   }
 }
 
-function showMsg(id, ok=true){
+function showMsg(id){
   const el = document.getElementById(id);
   if(!el) return;
   el.style.display = 'block';
-  el.className = `msg ${ok?'ok':'err'}`;
-  setTimeout(()=>el.style.display='none', 2000);
+  setTimeout(() => el.style.display = 'none', 2500);
 }
 
-document.addEventListener('keydown', e=>{
-  if(e.key==='Enter' && document.getElementById('login-screen').style.display!=='none'){
-    login();
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    const ls = document.getElementById('login-screen');
+    if(ls && ls.style.display !== 'none') login();
   }
 });
 </script>
