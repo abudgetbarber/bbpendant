@@ -14,6 +14,7 @@
   --red:#c0392b;--red-lt:#fdecea;
   --blue:#1a4fa0;--blue-lt:#e8f0fc;
   --teal:#0f6e56;--teal-lt:#e1f5ee;
+  --purple:#4a2d8f;--purple-lt:#f0ebff;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
 .topbar{background:var(--ink);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
@@ -35,7 +36,8 @@ input[type=password]{letter-spacing:0.1em}
 .btn-p{width:100%;padding:11px;background:var(--ink);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;letter-spacing:0.03em;transition:background 0.15s}
 .btn-p:hover{background:#333}
 .btn-p.ok{background:var(--green)}
-.btn-p.gold{background:var(--gold-dk)}
+.btn-p.purple{background:var(--purple)}
+.btn-p.purple:hover{background:#3a1f7a}
 .btn-s{padding:7px 14px;border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:11px;background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.1s}
 .btn-s:hover{background:rgba(255,255,255,0.08);color:#fff}
 .btn-s.dark{border-color:var(--border);background:var(--paper);color:var(--ink)}
@@ -55,6 +57,7 @@ input[type=password]{letter-spacing:0.1em}
 .badge.r{background:var(--red-lt);color:var(--red)}
 .badge.b{background:var(--blue-lt);color:var(--blue)}
 .badge.t{background:var(--teal-lt);color:var(--teal)}
+.badge.p{background:var(--purple-lt);color:var(--purple)}
 .chat-wrap{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--paper);border-radius:10px;min-height:220px;max-height:420px;overflow-y:auto}
 .bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;max-width:86%}
 .bubble.cust{background:var(--surf);border:0.5px solid var(--border);border-radius:12px 12px 12px 2px}
@@ -97,11 +100,39 @@ input[type=password]{letter-spacing:0.1em}
 .param-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted)}
 .param-name{font-size:12px;font-weight:500;color:var(--ink);margin:2px 0}
 .param-treat{font-size:10px;color:var(--teal);margin-top:3px}
+/* ── SYSTEM PROMPT PAGE ─────────────────────────────────────── */
+.prompt-banner{background:linear-gradient(135deg,var(--purple),#2d1a6e);border-radius:12px;padding:16px;color:#fff;margin-bottom:4px}
+.prompt-banner h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;margin-bottom:4px}
+.prompt-banner p{font-size:12px;opacity:0.8;line-height:1.5}
+.prompt-editor{width:100%;min-height:280px;padding:14px;border:0.5px solid var(--border);border-radius:10px;font-family:'DM Mono',monospace;font-size:12px;background:var(--paper);color:var(--ink);line-height:1.7;resize:vertical;margin-top:0}
+.prompt-editor:focus{outline:2px solid var(--purple);border-color:var(--purple)}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.preset-card{background:var(--surf);border:0.5px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:border-color 0.15s}
+.preset-card:hover{border-color:var(--purple)}
+.preset-card.active-preset{border-color:var(--purple);background:var(--purple-lt)}
+.preset-title{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.preset-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.block-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.block-row:last-child{border-bottom:none}
+.block-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px}
+.block-icon.purple{background:var(--purple-lt)}
+.block-icon.green{background:var(--green-lt)}
+.block-icon.gold{background:var(--gold-lt)}
+.block-icon.teal{background:var(--teal-lt)}
+.block-body{flex:1}
+.block-title{font-size:13px;font-weight:500;color:var(--ink)}
+.block-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.char-count{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-align:right;margin-top:4px}
+.char-count.warn{color:var(--gold-dk)}
+.char-count.over{color:var(--red)}
+.preview-box{background:var(--paper);border:0.5px solid var(--border);border-radius:10px;padding:12px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.7;color:var(--ink);white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto}
+.preview-section{color:var(--muted);font-size:10px;letter-spacing:0.08em}
+.preview-custom{color:var(--purple)}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-wrap" id="login-screen">
   <div class="login-box">
     <div class="login-title">BARBER<span style="color:var(--gold)">PENDANT</span></div>
@@ -135,11 +166,12 @@ input[type=password]{letter-spacing:0.1em}
     <div class="tab"     onclick="go('discounts')">Discounts</div>
     <div class="tab"     onclick="go('skin')">Skin AI</div>
     <div class="tab"     onclick="go('qa')">Q &amp; A</div>
+    <div class="tab"     onclick="go('prompt')">System Prompt</div>
     <div class="tab"     onclick="go('test')">Test agent</div>
     <div class="tab"     onclick="go('settings')">Settings</div>
   </div>
 
-  <!-- SERVICES PAGE -->
+  <!-- SERVICES -->
   <div class="page on" id="pg-services">
     <div class="lbl">Current services</div>
     <div class="card" id="svc-list"></div>
@@ -153,7 +185,7 @@ input[type=password]{letter-spacing:0.1em}
     </div>
   </div>
 
-  <!-- COMBOS PAGE -->
+  <!-- COMBOS -->
   <div class="page" id="pg-combos">
     <div class="lbl">Current combos</div>
     <div class="card" id="combo-list"></div>
@@ -169,7 +201,7 @@ input[type=password]{letter-spacing:0.1em}
     </div>
   </div>
 
-  <!-- DISCOUNTS PAGE -->
+  <!-- DISCOUNTS -->
   <div class="page" id="pg-discounts">
     <div class="lbl">Active discount rules</div>
     <div class="card" id="disc-list"></div>
@@ -189,78 +221,130 @@ input[type=password]{letter-spacing:0.1em}
     </div>
   </div>
 
-  <!-- SKIN AI PAGE -->
+  <!-- SKIN AI -->
   <div class="page" id="pg-skin">
     <div class="skin-banner">
       <h3>AI Skin Analysis — 15 Parameters</h3>
-      <p>Agent automatically informs every customer about the free AI skin analysis and nudges toward the right facial. This knowledge is baked into the agent and cannot be turned off — it is a key upsell feature.</p>
+      <p>Agent automatically informs every customer about the free AI skin analysis and nudges toward the right facial. This knowledge is baked into the agent and cannot be turned off.</p>
     </div>
-
     <div class="lbl">How agent uses skin knowledge</div>
     <div class="card">
-      <div class="row">
-        <div>
-          <div class="row-name">Greet &amp; mention AI scan at session start</div>
-          <div class="row-sub">Agent tells every new customer that a free AI skin analysis is available</div>
-        </div>
-        <div class="tog on" id="tog-skin-greet" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div class="row">
-        <div>
-          <div class="row-name">Nudge facial after haircut mention</div>
-          <div class="row-sub">When customer asks about haircut, agent suggests adding a facial based on skin concern</div>
-        </div>
-        <div class="tog on" id="tog-skin-nudge" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div class="row">
-        <div>
-          <div class="row-name">Respond to skin questions with expert info</div>
-          <div class="row-sub">Agent explains skin parameters in simple language and recommends the right facial</div>
-        </div>
-        <div class="tog on" id="tog-skin-explain" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div class="row" style="border-bottom:none">
-        <div>
-          <div class="row-name">Quote facial prices when recommending</div>
-          <div class="row-sub">Agent always mentions the price when recommending a facial</div>
-        </div>
-        <div class="tog on" id="tog-skin-price" onclick="this.classList.toggle('on')"></div>
-      </div>
+      <div class="row"><div><div class="row-name">Greet &amp; mention AI scan at session start</div><div class="row-sub">Agent tells every new customer that a free AI skin analysis is available</div></div><div class="tog on" id="tog-skin-greet" onclick="this.classList.toggle('on')"></div></div>
+      <div class="row"><div><div class="row-name">Nudge facial after haircut mention</div><div class="row-sub">When customer asks about haircut, agent suggests adding a facial</div></div><div class="tog on" id="tog-skin-nudge" onclick="this.classList.toggle('on')"></div></div>
+      <div class="row"><div><div class="row-name">Respond to skin questions with expert info</div><div class="row-sub">Agent explains skin parameters and recommends the right facial</div></div><div class="tog on" id="tog-skin-explain" onclick="this.classList.toggle('on')"></div></div>
+      <div class="row" style="border-bottom:none"><div><div class="row-name">Quote facial prices when recommending</div><div class="row-sub">Agent always mentions the price when recommending a facial</div></div><div class="tog on" id="tog-skin-price" onclick="this.classList.toggle('on')"></div></div>
     </div>
-
     <div class="lbl">9 parameters with facial treatment</div>
     <div class="param-grid" id="facial-params"></div>
-
     <div class="lbl" style="margin-top:4px">6 education-only parameters</div>
     <div class="param-grid" id="edu-params"></div>
-
-    <div class="lbl" style="margin-top:4px">Facial treatments in knowledge base</div>
+    <div class="lbl" style="margin-top:4px">Facial treatments</div>
     <div class="card" id="facial-list"></div>
-
-    <div class="card" style="padding:12px 14px">
-      <div style="font-size:12px;color:var(--muted);line-height:1.6">
-        <strong style="color:var(--ink)">Agent skin script example:</strong><br/>
-        "Sir, Budget Barber mein ek free AI Skin Analysis bhi hoti hai — sirf 2 minutes mein 15 cheezein check hoti hain jaise spots, oiliness, wrinkles aur glow. Aap ki skin ke hisaab se sahi facial bata sakte hain. Kya aap try karna chahenge?"
-      </div>
-    </div>
   </div>
 
-  <!-- Q&A PAGE -->
+  <!-- Q&A -->
   <div class="page" id="pg-qa">
     <div class="lbl">Custom Q &amp; A pairs</div>
     <div class="card" id="qa-list"></div>
     <div class="lbl">Add Q &amp; A pair</div>
     <div class="card">
-      <div class="fr"><label>If customer asks about...</label>
-        <input id="q-q" placeholder="e.g. do you do facials, WiFi password, parking"/></div>
-      <div class="fr"><label>Agent replies...</label>
-        <textarea id="q-a" placeholder="e.g. Yes we do basic facials for ₹150, takes about 20 minutes. Want to add it on today?"></textarea></div>
+      <div class="fr"><label>If customer asks about...</label><input id="q-q" placeholder="e.g. do you do facials, WiFi password, parking"/></div>
+      <div class="fr"><label>Agent replies...</label><textarea id="q-a" placeholder="e.g. Yes we do basic facials for ₹150, takes about 20 minutes. Want to add it on today?"></textarea></div>
       <button class="btn-p" onclick="addQA()">Save Q &amp; A</button>
       <div class="msg ok" id="qa-msg">Q&amp;A saved!</div>
     </div>
   </div>
 
-  <!-- TEST AGENT PAGE -->
+  <!-- ══════════════════════════════════════════════════════════
+       SYSTEM PROMPT PAGE
+  ══════════════════════════════════════════════════════════ -->
+  <div class="page" id="pg-prompt">
+
+    <div class="prompt-banner">
+      <h3>System Prompt — Agent Behaviour</h3>
+      <p>Define exactly how Kumar (your agent) speaks to customers — tone, personality, priorities and rules. This is the brain of the agent. Changes here override the defaults.</p>
+    </div>
+
+    <!-- WHAT IS A SYSTEM PROMPT -->
+    <div class="lbl">What each section controls</div>
+    <div class="card">
+      <div class="block-row">
+        <div class="block-icon purple">🎭</div>
+        <div class="block-body">
+          <div class="block-title">Persona &amp; Tone</div>
+          <div class="block-sub">How Kumar introduces himself, how friendly or formal he sounds, whether he uses "sir/bhai/anna" etc. This shapes the entire personality.</div>
+        </div>
+      </div>
+      <div class="block-row">
+        <div class="block-icon green">📋</div>
+        <div class="block-body">
+          <div class="block-title">Behaviour Rules</div>
+          <div class="block-sub">What Kumar does and does not do — when to escalate to staff, how to handle complaints, whether to ask clarifying questions, how pushy to be with upsells.</div>
+        </div>
+      </div>
+      <div class="block-row">
+        <div class="block-icon gold">💬</div>
+        <div class="block-body">
+          <div class="block-title">Response Style</div>
+          <div class="block-sub">Length of replies, use of local language phrases, whether to greet first or answer directly, how to end a conversation.</div>
+        </div>
+      </div>
+      <div class="block-row" style="border-bottom:none">
+        <div class="block-icon teal">🚫</div>
+        <div class="block-body">
+          <div class="block-title">Restrictions</div>
+          <div class="block-sub">Topics Kumar should avoid, things he should never say, how to handle rude customers, what to do if asked about competitors.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET PERSONALITIES -->
+    <div class="lbl">Quick presets — pick a personality</div>
+    <div class="preset-grid" id="preset-grid"></div>
+
+    <!-- CUSTOM PROMPT EDITOR -->
+    <div class="lbl">Your custom system prompt</div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:13px;font-weight:500;color:var(--ink)">Write your instructions for Kumar</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-s dark" onclick="clearPrompt()" style="font-size:11px">Clear</button>
+          <button class="btn-s dark" onclick="resetPromptToDefault()" style="font-size:11px">Reset default</button>
+        </div>
+      </div>
+      <textarea class="prompt-editor" id="custom-prompt"
+        placeholder="e.g.&#10;- Always greet the customer warmly with 'Welcome to Budget Barber!'&#10;- Use 'sir' when speaking in Hindi or Telugu&#10;- Never discuss competitor salons&#10;- If customer seems unhappy, immediately apologize and offer a discount&#10;- Keep all replies under 2 sentences&#10;- End every interaction by asking 'Aur kuch chahiye aapko?'"
+        oninput="updateCharCount()"></textarea>
+      <div class="char-count" id="char-count">0 characters</div>
+      <div class="fr-hint" style="margin-top:8px">
+        Write plain instructions in English. You can mix languages in the examples you give. The agent will follow these on top of the built-in knowledge base rules.
+      </div>
+      <button class="btn-p purple" onclick="savePrompt()">Save system prompt</button>
+      <div class="msg ok" id="prompt-msg">System prompt saved! Agent will use this from the next conversation.</div>
+    </div>
+
+    <!-- LIVE PREVIEW -->
+    <div class="lbl">Preview — how the full system prompt looks to the agent</div>
+    <div class="card">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5">
+        This is what the agent actually receives. Your custom instructions are injected at the top, before the built-in knowledge base.
+      </div>
+      <div class="preview-box" id="prompt-preview"></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--muted)">
+        <span style="color:var(--purple);font-weight:500">Purple text</span> = your custom instructions &nbsp;·&nbsp;
+        <span style="color:var(--muted)">Grey text</span> = built-in system rules
+      </div>
+    </div>
+
+    <!-- EXAMPLE INSTRUCTIONS -->
+    <div class="lbl">Example instructions you can copy</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:8px" id="example-list"></div>
+    </div>
+
+  </div>
+
+  <!-- TEST AGENT -->
   <div class="page" id="pg-test">
     <div id="key-warning" style="display:none;background:var(--gold-lt);border:0.5px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--gold-dk)">
       Anthropic API key not set. Go to <strong>Settings → API keys</strong> and add your key first.
@@ -279,15 +363,13 @@ input[type=password]{letter-spacing:0.1em}
     <div style="display:flex;flex-wrap:wrap;gap:7px" id="quick-tests"></div>
     <div class="card" style="padding:12px 14px">
       <div style="font-size:12px;color:var(--muted);line-height:1.6">
-        <strong style="color:var(--ink)">How it works:</strong> Agent answers prices, combos, discounts and salon info automatically in the customer's language. It also informs customers about AI Skin Analysis and recommends facials. Styling instructions escalate to staff.
+        <strong style="color:var(--ink)">How it works:</strong> Agent answers prices, combos, discounts, skin analysis and salon info in the customer's language. Your custom system prompt shapes how it talks. Styling instructions escalate to staff.
       </div>
     </div>
   </div>
 
-  <!-- SETTINGS PAGE -->
+  <!-- SETTINGS -->
   <div class="page" id="pg-settings">
-
-    <!-- API KEYS -->
     <div class="lbl">API keys</div>
     <div class="card">
       <div class="card-hd">API keys <span class="badge b">Stored in browser only</span></div>
@@ -302,25 +384,19 @@ input[type=password]{letter-spacing:0.1em}
         <label>ElevenLabs API key</label>
         <input type="password" id="eleven-key" placeholder="your-elevenlabs-key..."/>
         <div id="eleven-status" class="key-status unset">Not set</div>
-        <div class="fr-hint">Get from <strong>elevenlabs.io</strong> → click your profile icon top right → API Key</div>
+        <div class="fr-hint">Get from <strong>elevenlabs.io</strong> → profile icon → API Key</div>
       </div>
       <div class="section-divider"></div>
       <div class="fr" style="margin-top:12px">
         <label>ElevenLabs Voice ID</label>
         <input type="text" id="eleven-voice" placeholder="pNInz6obpgDQGcFmaJgB"/>
-        <div class="fr-hint">
-          Get from <strong>elevenlabs.io</strong> → Voices → click any voice → copy the ID.<br/>
-          Default (Adam): <code style="background:var(--paper);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">pNInz6obpgDQGcFmaJgB</code>
-        </div>
+        <div class="fr-hint">Default (Adam): <code style="background:var(--paper);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px">pNInz6obpgDQGcFmaJgB</code></div>
       </div>
       <button class="btn-p" onclick="saveKeys()">Save API keys</button>
-      <div class="msg ok" id="keys-msg">API keys saved in browser!</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
-        Keys are stored only in your browser localStorage — never sent to GitHub or any server.
-      </div>
+      <div class="msg ok" id="keys-msg">Keys saved!</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">Keys stored only in your browser — never sent to GitHub or any server.</div>
     </div>
 
-    <!-- SALON INFO -->
     <div class="lbl">Salon info</div>
     <div class="card">
       <div class="fr"><label>Salon name</label><input id="s-name" placeholder="Budget Barber"/></div>
@@ -331,12 +407,9 @@ input[type=password]{letter-spacing:0.1em}
       <div class="msg ok" id="salon-msg">Salon info saved!</div>
     </div>
 
-    <!-- AGENT SETTINGS -->
     <div class="lbl">Agent settings</div>
     <div class="card">
-      <div class="fr"><label>Agent name</label><input id="ag-name" placeholder="e.g. Kumar"/>
-        <div class="fr-hint">This is the name the agent uses when speaking to customers</div>
-      </div>
+      <div class="fr"><label>Agent name</label><input id="ag-name" placeholder="e.g. Kumar"/></div>
       <div class="fr"><label>Voice style</label>
         <select id="ag-style">
           <option>Friendly and warm</option>
@@ -344,128 +417,148 @@ input[type=password]{letter-spacing:0.1em}
           <option>Quick and efficient</option>
         </select>
       </div>
-      <div class="row">
-        <div><div style="font-size:13px;font-weight:500">Upsell combos when relevant</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Agent suggests combos when customer asks for a single service price</div></div>
-        <div class="tog on" id="tog-upsell" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div class="row">
-        <div><div style="font-size:13px;font-weight:500">Announce discounts at session start</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Agent greets new customer and mentions active offers</div></div>
-        <div class="tog" id="tog-announce" onclick="this.classList.toggle('on')"></div>
-      </div>
+      <div class="row"><div><div style="font-size:13px;font-weight:500">Upsell combos when relevant</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Agent suggests combos when customer asks for a single service price</div></div><div class="tog on" id="tog-upsell" onclick="this.classList.toggle('on')"></div></div>
+      <div class="row"><div><div style="font-size:13px;font-weight:500">Announce discounts at session start</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Agent greets new customer and mentions active offers</div></div><div class="tog" id="tog-announce" onclick="this.classList.toggle('on')"></div></div>
       <button class="btn-p" onclick="saveAgentSettings()">Save agent settings</button>
       <div class="msg ok" id="agent-msg">Agent settings saved!</div>
     </div>
 
-    <!-- PASSWORD -->
     <div class="lbl">Admin password</div>
     <div class="card">
       <div class="fr"><label>New password</label><input type="password" id="new-pass" placeholder="Enter new password"/></div>
       <div class="fr"><label>Confirm new password</label><input type="password" id="new-pass2" placeholder="Repeat new password"/></div>
       <button class="btn-p" onclick="changePass()">Change password</button>
-      <div class="msg ok"  id="pass-msg">Password changed!</div>
+      <div class="msg ok" id="pass-msg">Password changed!</div>
       <div class="msg err" id="pass-err" style="display:none">Passwords do not match</div>
     </div>
 
-    <!-- DANGER -->
     <div class="lbl">Danger zone</div>
     <div class="card">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Deletes all services, combos, discounts and Q&A and restores default data.</div>
-      <button class="btn-p" style="background:var(--red)" onclick="resetAll()">Reset all knowledge base data</button>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Deletes all services, combos, discounts, Q&A and system prompt, restores defaults.</div>
+      <button class="btn-p" style="background:var(--red)" onclick="resetAll()">Reset all data</button>
     </div>
   </div>
 </div>
 
 <script>
-const PASS_KEY    = 'bp_password';
-const KB_KEY      = 'bp_kb';
-const APIKEY_KEY  = 'bp_apikey';
-const ELEVENKEY   = 'bp_elevenkey';
-const VOICEID_KEY = 'bp_voiceid';
+const PASS_KEY     = 'bp_password';
+const KB_KEY       = 'bp_kb';
+const APIKEY_KEY   = 'bp_apikey';
+const ELEVENKEY    = 'bp_elevenkey';
+const VOICEID_KEY  = 'bp_voiceid';
+const PROMPT_KEY   = 'bp_system_prompt';
 const DEFAULT_PASS = 'barber123';
 
 let chatHistory = [];
 
-// ── SKIN KNOWLEDGE BASE ──────────────────────────────────────
+// ── SKIN DATA ─────────────────────────────────────────────────
 const SKIN_PARAMS = [
-  {id:"01",name:"Spots & Pigmentation",      hindi:"दाग / धब्बे",        facial:true,  treat:"Astaberry Papaya Facial", price:"₹599",
-   info:"Dark spots or uneven patches from sun, hormones or old acne. AI counts and maps them on the face."},
-  {id:"02",name:"Wrinkles / Fine Lines",     hindi:"झुर्रियाँ",           facial:true,  treat:"Red Wine Facial",        price:"₹799",
-   info:"Lines on forehead, around eyes and mouth caused by collagen loss and repeated expressions."},
-  {id:"03",name:"Texture",                   hindi:"त्वचा की बनावट",     facial:false, treat:null,                     price:null,
-   info:"Surface quality — smooth vs rough, bumpy or uneven. Dead skin cells make texture rough."},
-  {id:"04",name:"Redness",                   hindi:"लालिमा / Irritation", facial:false, treat:null,                     price:null,
-   info:"Red patches from skin sensitivity, rosacea or inflammation caused by pollution, harsh products or sun."},
-  {id:"05",name:"Oiliness",                  hindi:"तैलीयपन",             facial:true,  treat:"Pearl Facial",           price:"₹699",
-   info:"Excess shine especially on T-zone (forehead, nose, chin). Extra oil attracts dust and blocks pores."},
-  {id:"06",name:"Moisture / Hydration",      hindi:"नमी / Hydration",     facial:true,  treat:"Fruit Facial",           price:"₹499",
-   info:"Skin hydration level. Dehydrated skin looks dry, tight and dull. Hydrated skin looks plump and glowing."},
-  {id:"07",name:"Eye Bags",                  hindi:"आँखों के नीचे सूजन", facial:false, treat:null,                     price:null,
-   info:"Puffy area under eyes from fluid retention caused by lack of sleep, excess salt or sleeping angle."},
-  {id:"08",name:"Acne / Pimples",            hindi:"मुहांसे / दाने",       facial:true,  treat:"Pearl Facial",           price:"₹699",
-   info:"Active pimples, whiteheads and blackheads caused by blocked pores from oil, dead cells and bacteria."},
-  {id:"09",name:"Droopy Upper Eyelids",      hindi:"ऊपरी पलक का झुकना",  facial:false, treat:null,                     price:null,
-   info:"Upper eyelid dropping due to weakened collagen. Makes expression look heavy or tired."},
-  {id:"10",name:"Droopy Lower Eyelids",      hindi:"निचली पलक का ढीलापन",facial:false, treat:null,                     price:null,
-   info:"Loose lower eyelid skin — only 0.5mm thick, earliest area to show aging."},
-  {id:"11",name:"Firmness",                  hindi:"त्वचा की कसावट",      facial:true,  treat:"Gold Facial",            price:"₹699",
-   info:"Skin elasticity and tightness. Collagen and elastin proteins keep skin firm. Gold micro-particles boost collagen."},
-  {id:"12",name:"Radiance / Glow",           hindi:"चमक / Glow",          facial:true,  treat:"Astaberry Brightening",  price:"₹799",
-   info:"Overall brightness and light reflection. Dead cells, pollution and dehydration hide natural glow."},
-  {id:"13",name:"Dark Circles",              hindi:"आँखों के काले घेरे",  facial:false, treat:null,                     price:null,
-   info:"Darkness under eyes from visible blood vessels through thin skin. Worsened by lack of sleep or genetics."},
-  {id:"14",name:"Pores",                     hindi:"रोमछिद्र",             facial:false, treat:null,                     price:null,
-   info:"Visible pore size on nose and cheeks. Enlarged when blocked by oil and dirt."},
-  {id:"15",name:"Skin Type Detection",       hindi:"त्वचा का प्रकार",      facial:false, treat:null,                     price:null,
-   info:"Identifies skin as Normal, Oily, Dry, Combination or Sensitive. Guides product and facial recommendation."}
+  {id:"01",name:"Spots & Pigmentation",   hindi:"दाग / धब्बे",        facial:true,  treat:"Astaberry Papaya Facial",  price:"₹599"},
+  {id:"02",name:"Wrinkles / Fine Lines",  hindi:"झुर्रियाँ",           facial:true,  treat:"Red Wine Facial",          price:"₹799"},
+  {id:"03",name:"Texture",                hindi:"त्वचा की बनावट",     facial:false, treat:null, price:null},
+  {id:"04",name:"Redness",                hindi:"लालिमा / Irritation", facial:false, treat:null, price:null},
+  {id:"05",name:"Oiliness",               hindi:"तैलीयपन",             facial:true,  treat:"Pearl Facial",             price:"₹699"},
+  {id:"06",name:"Moisture / Hydration",   hindi:"नमी / Hydration",     facial:true,  treat:"Fruit Facial",             price:"₹499"},
+  {id:"07",name:"Eye Bags",               hindi:"आँखों के नीचे सूजन", facial:false, treat:null, price:null},
+  {id:"08",name:"Acne / Pimples",         hindi:"मुहांसे / दाने",       facial:true,  treat:"Pearl Facial",             price:"₹699"},
+  {id:"09",name:"Droopy Upper Eyelids",   hindi:"ऊपरी पलक का झुकना",  facial:false, treat:null, price:null},
+  {id:"10",name:"Droopy Lower Eyelids",   hindi:"निचली पलक का ढीलापन",facial:false, treat:null, price:null},
+  {id:"11",name:"Firmness",               hindi:"त्वचा की कसावट",      facial:true,  treat:"Gold Facial",              price:"₹699"},
+  {id:"12",name:"Radiance / Glow",        hindi:"चमक / Glow",          facial:true,  treat:"Astaberry Brightening",    price:"₹799"},
+  {id:"13",name:"Dark Circles",           hindi:"आँखों के काले घेरे",  facial:false, treat:null, price:null},
+  {id:"14",name:"Pores",                  hindi:"रोमछिद्र",             facial:false, treat:null, price:null},
+  {id:"15",name:"Skin Type Detection",    hindi:"त्वचा का प्रकार",      facial:false, treat:null, price:null}
 ];
 
 const FACIALS_KB = [
-  {name:"Fruit Facial",             price:"₹499", good_for:"Dry skin, dehydration, dull glow"},
-  {name:"Pearl Facial",             price:"₹699", good_for:"Oily skin, acne, blackheads, large pores"},
-  {name:"Gold Facial",              price:"₹699", good_for:"Loose skin, loss of firmness, anti-ageing"},
-  {name:"Red Wine Facial",          price:"₹799", good_for:"Wrinkles, fine lines, collagen loss"},
-  {name:"Astaberry Papaya Facial",  price:"₹599", good_for:"Dark spots, pigmentation, uneven tone"},
-  {name:"Astaberry Brightening Kit",price:"₹799", good_for:"Dull skin, low radiance, uneven glow"}
+  {name:"Fruit Facial",              price:"₹499", good_for:"Dry skin, dehydration, dull glow"},
+  {name:"Pearl Facial",              price:"₹699", good_for:"Oily skin, acne, blackheads, large pores"},
+  {name:"Gold Facial",               price:"₹699", good_for:"Loose skin, loss of firmness, anti-ageing"},
+  {name:"Red Wine Facial",           price:"₹799", good_for:"Wrinkles, fine lines, collagen loss"},
+  {name:"Astaberry Papaya Facial",   price:"₹599", good_for:"Dark spots, pigmentation, uneven tone"},
+  {name:"Astaberry Brightening Kit", price:"₹799", good_for:"Dull skin, low radiance, uneven glow"}
 ];
 
-const SKIN_SYSTEM_ADDON = `
+const SKIN_ADDON = `
 AI SKIN ANALYSIS & FACIAL KNOWLEDGE:
-Budget Barber offers a FREE AI Skin Analysis that checks 15 skin parameters in 2 minutes using a camera scan.
-
-PARAMETERS WITH FACIAL TREATMENT:
-- Spots & Pigmentation → Astaberry Papaya Facial ₹599
-- Wrinkles / Fine Lines → Red Wine Facial ₹799
-- Oiliness → Pearl Facial ₹699
-- Moisture / Hydration → Fruit Facial ₹499
-- Acne / Pimples → Pearl Facial ₹699
-- Firmness → Gold Facial ₹699
-- Radiance / Glow → Astaberry Brightening Kit ₹799
-
-EDUCATION-ONLY PARAMETERS (explain but no specific facial):
-- Texture, Redness, Eye Bags, Droopy Eyelids, Dark Circles, Pores, Skin Type Detection
-
-AGENT SKIN RULES:
-1. At the START of every customer interaction, mention the free AI skin analysis ONCE.
-   Example script: "Sir, hamare yahan ek free AI Skin Analysis bhi hoti hai — sirf 2 minute mein 15 cheezein check hoti hain jaise spots, oiliness aur glow. Aapki skin ke hisaab se sahi facial suggest kar sakte hain. Try karenge?"
-2. If customer asks about haircut OR beard trim, ALWAYS suggest adding a facial at the end.
-   Example: "Haircut ke saath ek facial bhi add karein? Aapki skin ke liye Pearl Facial ₹699 ya Fruit Facial ₹499 best rahega."
-3. If customer mentions any skin concern (dark spots, pimples, dry skin, dull face, oily skin, wrinkles, dark circles), recommend the specific facial for that concern.
-4. If customer asks "what facial should I get" or "kaunsa facial lena chahiye" — ask one question: "Kya aapki skin zyada oily hai, ya dry? Koi dark spots ya pimples hain?" then recommend accordingly.
-5. Always mention the price when recommending a facial.
-6. Never be pushy — offer once, if customer says no, respect it and move on.
+Budget Barber offers a FREE AI Skin Analysis checking 15 skin parameters in 2 minutes.
+Parameters with facial: Spots→Astaberry Papaya ₹599, Wrinkles→Red Wine ₹799, Oiliness→Pearl ₹699, Hydration→Fruit ₹499, Acne→Pearl ₹699, Firmness→Gold ₹699, Radiance→Brightening ₹799.
+Education only: Texture, Redness, Eye Bags, Droopy Eyelids, Dark Circles, Pores, Skin Type.
+SKIN RULES: (1) Mention free AI scan ONCE at start of every session. (2) After haircut/beard trim question, suggest a facial. (3) Match skin concern to specific facial with price. (4) Never be pushy — if customer says no, move on.
 `;
+
+// ── SYSTEM PROMPT PRESETS ─────────────────────────────────────
+const PRESETS = [
+  {
+    id:"friendly",
+    title:"Friendly Neighbourhood",
+    desc:"Warm, local feel. Uses bhai/sir/anna. Casual and approachable.",
+    prompt:`- Greet every customer warmly: "Namaste! Budget Barber mein aapka swagat hai!"
+- Use "sir" or "bhai" when speaking Hindi/Telugu, "anna" or "sir" in Tamil, "anna/sir" in Kannada
+- Sound like a helpful friend, not a formal assistant
+- If customer seems hesitant about a facial, gently reassure: "Koi pressure nahi hai sir, sirf suggest kar raha hoon"
+- End every interaction with: "Aur kuch chahiye? Khushi se help karunga!"
+- Never use robotic phrases like "Certainly!" or "Of course!" — speak naturally`
+  },
+  {
+    id:"professional",
+    title:"Professional & Efficient",
+    desc:"Crisp, respectful, straight to the point. Formal tone.",
+    prompt:`- Address customers as "Sir" always
+- Keep all replies to 1-2 sentences — no unnecessary filler words
+- Do not use casual phrases or slang
+- Offer services clearly: state the name and price directly
+- If asked something outside your knowledge, say "I will connect you with our staff immediately, sir"
+- Do not ask multiple questions — ask only what is most necessary
+- Maintain a respectful, premium salon tone at all times`
+  },
+  {
+    id:"upsell",
+    title:"Sales-Focused",
+    desc:"Actively promotes combos, facials and discounts at every opportunity.",
+    prompt:`- Always mention the best combo deal when a customer asks about any single service
+- After every price question, follow up with: "Agar combo lein toh aur save hoga — The Works sirf ₹150 mein!"
+- Remind about the free AI Skin Analysis in every interaction, twice if needed
+- When recommending a facial, mention the benefit first, then the price: "Gold Facial se skin tight lagegi — sirf ₹699 mein"
+- If customer says they will think about it, say "Aaj ka offer hai, kal bhi same price milegi!"
+- Never let a customer leave without mentioning at least one upsell`
+  },
+  {
+    id:"soft",
+    title:"Soft & Consultative",
+    desc:"Asks questions, listens carefully, recommends gently. No hard selling.",
+    prompt:`- Start by asking one question to understand what the customer needs today
+- Never recommend more than one thing at a time
+- If customer mentions a skin concern, ask a follow-up: "Kitne time se yeh problem hai?"
+- Only suggest a facial if customer expresses interest — do not push
+- If customer seems rushed, skip the upsells and just answer their question quickly
+- Use gentle language: "Aap chahein toh..." instead of "Aapko lena chahiye..."
+- End with: "Koi bhi sawaal ho toh bataiye, main hoon yahan"`
+  }
+];
+
+const EXAMPLE_INSTRUCTIONS = [
+  {text:"Always greet with 'Welcome to Budget Barber!' in the customer's language", category:"Greeting"},
+  {text:"If a customer complains, immediately apologize and offer 10% off their next visit", category:"Complaints"},
+  {text:"Never mention competitor salons by name — just say 'we offer the best value in town'", category:"Competitors"},
+  {text:"If asked about waiting time, check and give an honest answer — don't guess", category:"Honesty"},
+  {text:"Use the customer's name if they give it during the conversation", category:"Personalisation"},
+  {text:"If a customer asks for a service you don't offer, say 'We don't offer that yet, but we're expanding our services soon!'", category:"Missing services"},
+  {text:"Keep all responses under 2 sentences when the salon is busy", category:"Response length"},
+  {text:"If customer is rude, stay calm and say 'I understand sir, let me get our staff to help you directly'", category:"Difficult customers"},
+  {text:"Always confirm the customer's choice before ending: 'So that's a haircut for ₹80, correct?'", category:"Confirmation"},
+  {text:"Mention the loyalty programme to every customer who hasn't used it", category:"Loyalty"}
+];
 
 // ── DEFAULT KB ────────────────────────────────────────────────
 const DEFAULT_KB = {
   salon:{name:"Budget Barber",hours:"9AM to 8PM, all days including Sundays",payment:"Cash, Google Pay, PhonePe",location:"Your address here"},
   services:{
-    haircut:     {price:80,   desc:"Regular scissor or machine cut, any length"},
-    kids_cut:    {price:60,   desc:"For children under 10 years"},
-    beard_trim:  {price:50,   desc:"Shape and define, razor finish included"},
-    full_shave:  {price:60,   desc:"Hot towel and straight razor shave"},
-    head_massage:{price:40,   desc:"10-minute oil massage, available as add-on"},
+    haircut:     {price:80,    desc:"Regular scissor or machine cut, any length"},
+    kids_cut:    {price:60,    desc:"For children under 10 years"},
+    beard_trim:  {price:50,    desc:"Shape and define, razor finish included"},
+    full_shave:  {price:60,    desc:"Hot towel and straight razor shave"},
+    head_massage:{price:40,    desc:"10-minute oil massage, available as add-on"},
     hair_colour: {price:"200+",desc:"Depends on hair length and colour type"}
   },
   combos:[
@@ -483,11 +576,18 @@ const DEFAULT_KB = {
     {q:"appointment",   a:"Walk-in only, no appointment needed."},
     {q:"parking",       a:"Free parking right outside."},
     {q:"payment",       a:"We accept cash, Google Pay and PhonePe."},
-    {q:"facial",        a:"Yes! We offer multiple facials — Fruit Facial ₹499, Pearl Facial ₹699, Gold Facial ₹699, Red Wine Facial ₹799, Astaberry Papaya Facial ₹599, and Astaberry Brightening Kit ₹799. We also do a free AI Skin Analysis to help you pick the right one!"},
-    {q:"skin analysis", a:"It's a free 2-minute AI scan that checks 15 parameters — spots, oiliness, wrinkles, glow and more. Completely free, no obligation. Want to try?"}
+    {q:"facial",        a:"Yes! We offer Fruit Facial ₹499, Pearl Facial ₹699, Gold Facial ₹699, Red Wine Facial ₹799, Astaberry Papaya Facial ₹599, and Astaberry Brightening Kit ₹799. We also do a free AI Skin Analysis to help you pick the right one!"},
+    {q:"skin analysis", a:"Free 2-minute AI scan checking 15 parameters — spots, oiliness, wrinkles, glow and more. No obligation. Want to try?"}
   ],
   agent:{name:"Kumar",style:"Friendly and warm",upsell:true,announce:false}
 };
+
+const DEFAULT_CUSTOM_PROMPT = `- Always greet the customer warmly and make them feel welcome
+- Use respectful address like "sir" or "bhai" depending on the customer's language
+- Keep replies short and clear — this will be spoken aloud
+- Never make up prices or information that isn't in the knowledge base
+- If a customer seems unhappy, immediately apologise and offer to connect them with staff
+- End every helpful interaction by asking if there's anything else you can help with`;
 
 const QUICK_PHRASES = [
   "Haircut ku evvalavu?","Haircut ki price cheppandi","Koi combo offer hai?",
@@ -496,26 +596,27 @@ const QUICK_PHRASES = [
   "Facial ke baare mein batao","AI skin analysis kya hota hai?","Side mein aur short karo"
 ];
 
+// ── CORE ──────────────────────────────────────────────────────
 function getKB(){ return JSON.parse(localStorage.getItem(KB_KEY)||JSON.stringify(DEFAULT_KB)); }
-function setKB(kb){ localStorage.setItem(KB_KEY, JSON.stringify(kb)); }
+function setKB(kb){ localStorage.setItem(KB_KEY,JSON.stringify(kb)); }
 function getPass(){ return localStorage.getItem(PASS_KEY)||DEFAULT_PASS; }
+function getCustomPrompt(){ return localStorage.getItem(PROMPT_KEY)||DEFAULT_CUSTOM_PROMPT; }
 
 function login(){
-  const p = document.getElementById('pass').value;
-  if(p === getPass()){
+  if(document.getElementById('pass').value === getPass()){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='block';
     init();
   } else {
-    const err = document.getElementById('login-err');
-    err.style.display='block';
-    setTimeout(()=>err.style.display='none',3000);
+    const e=document.getElementById('login-err'); e.style.display='block';
+    setTimeout(()=>e.style.display='none',3000);
   }
 }
 
 function init(){
-  renderAll(); loadSettings(); buildQuickTests(); loadKeys(); updateKeyStatuses(); checkKeyWarning();
-  renderSkinPage();
+  renderAll(); loadSettings(); buildQuickTests(); loadKeys();
+  updateKeyStatuses(); checkKeyWarning(); renderSkinPage();
+  buildPresets(); buildExamples(); loadPromptEditor(); updatePromptPreview();
 }
 
 function go(id){
@@ -524,78 +625,127 @@ function go(id){
   document.getElementById('pg-'+id).classList.add('on');
   event.target.classList.add('on');
   if(id==='test') checkKeyWarning();
+  if(id==='prompt'){ loadPromptEditor(); updatePromptPreview(); }
 }
 
+// ── RENDER ────────────────────────────────────────────────────
 function renderAll(){ renderServices(); renderCombos(); renderDiscounts(); renderQA(); }
 
 function renderServices(){
-  const kb=getKB(), el=document.getElementById('svc-list');
-  const entries=Object.entries(kb.services||{});
-  el.innerHTML=entries.length?entries.map(([k,s])=>`
-    <div class="row">
-      <div style="flex:1;min-width:0"><div class="row-name">${s.desc||k}</div>
-        <div class="row-sub" style="font-family:'DM Mono',monospace;font-size:10px">${k}</div></div>
-      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-        <div class="row-price">&#8377;${s.price}</div>
-        <button class="del" onclick="delService('${k}')">Remove</button></div></div>`).join('')
-  :'<div style="color:var(--muted);font-size:13px;padding:8px 0">No services yet</div>';
+  const kb=getKB(),el=document.getElementById('svc-list');
+  const e=Object.entries(kb.services||{});
+  el.innerHTML=e.length?e.map(([k,s])=>`<div class="row"><div style="flex:1;min-width:0"><div class="row-name">${s.desc||k}</div><div class="row-sub" style="font-family:'DM Mono',monospace;font-size:10px">${k}</div></div><div style="display:flex;align-items:center;gap:10px;flex-shrink:0"><div class="row-price">&#8377;${s.price}</div><button class="del" onclick="delService('${k}')">Remove</button></div></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No services yet</div>';
 }
-
 function renderCombos(){
-  const kb=getKB(), el=document.getElementById('combo-list');
-  el.innerHTML=(kb.combos||[]).length?(kb.combos||[]).map((c,i)=>`
-    <div class="row">
-      <div style="flex:1;min-width:0"><div class="row-name">${c.name}</div>
-        <div class="row-sub">${(c.includes||[]).join(' + ')}${c.valid?' &nbsp;<span class="badge a">'+c.valid+'</span>':''}</div></div>
-      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-        <div style="text-align:right">
-          <div style="text-decoration:line-through;font-size:11px;color:var(--muted)">&#8377;${c.original}</div>
-          <div class="row-price">&#8377;${c.price}</div></div>
-        <button class="del" onclick="delCombo(${i})">Remove</button></div></div>`).join('')
-  :'<div style="color:var(--muted);font-size:13px;padding:8px 0">No combos yet</div>';
+  const kb=getKB(),el=document.getElementById('combo-list');
+  el.innerHTML=(kb.combos||[]).length?(kb.combos||[]).map((c,i)=>`<div class="row"><div style="flex:1;min-width:0"><div class="row-name">${c.name}</div><div class="row-sub">${(c.includes||[]).join(' + ')}${c.valid?' &nbsp;<span class="badge a">'+c.valid+'</span>':''}</div></div><div style="display:flex;align-items:center;gap:10px;flex-shrink:0"><div style="text-align:right"><div style="text-decoration:line-through;font-size:11px;color:var(--muted)">&#8377;${c.original}</div><div class="row-price">&#8377;${c.price}</div></div><button class="del" onclick="delCombo(${i})">Remove</button></div></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No combos yet</div>';
 }
-
 function renderDiscounts(){
-  const kb=getKB(), el=document.getElementById('disc-list');
-  el.innerHTML=(kb.discounts||[]).length?(kb.discounts||[]).map((d,i)=>`
-    <div class="row">
-      <div style="flex:1;min-width:0">
-        <div class="row-name">${d.name} &nbsp;<span class="badge ${d.active?'g':'r'}">${d.active?'Active':'Inactive'}</span></div>
-        <div class="row-sub">${d.value}</div>
-        <div class="row-sub" style="margin-top:3px">Triggers: ${(d.triggers||[]).join(', ')}</div></div>
-      <button class="del" onclick="delDiscount(${i})" style="margin-left:10px;flex-shrink:0">Remove</button></div>`).join('')
-  :'<div style="color:var(--muted);font-size:13px;padding:8px 0">No discounts yet</div>';
+  const kb=getKB(),el=document.getElementById('disc-list');
+  el.innerHTML=(kb.discounts||[]).length?(kb.discounts||[]).map((d,i)=>`<div class="row"><div style="flex:1;min-width:0"><div class="row-name">${d.name} &nbsp;<span class="badge ${d.active?'g':'r'}">${d.active?'Active':'Inactive'}</span></div><div class="row-sub">${d.value}</div><div class="row-sub" style="margin-top:3px">Triggers: ${(d.triggers||[]).join(', ')}</div></div><button class="del" onclick="delDiscount(${i})" style="margin-left:10px;flex-shrink:0">Remove</button></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No discounts yet</div>';
 }
-
 function renderQA(){
-  const kb=getKB(), el=document.getElementById('qa-list');
-  el.innerHTML=(kb.qa||[]).length?(kb.qa||[]).map((q,i)=>`
-    <div class="row">
-      <div style="flex:1;min-width:0"><div class="row-name">${q.q}</div><div class="row-sub">${q.a}</div></div>
-      <button class="del" onclick="delQA(${i})" style="margin-left:10px;flex-shrink:0">Remove</button></div>`).join('')
-  :'<div style="color:var(--muted);font-size:13px;padding:8px 0">No Q&A yet</div>';
+  const kb=getKB(),el=document.getElementById('qa-list');
+  el.innerHTML=(kb.qa||[]).length?(kb.qa||[]).map((q,i)=>`<div class="row"><div style="flex:1;min-width:0"><div class="row-name">${q.q}</div><div class="row-sub">${q.a}</div></div><button class="del" onclick="delQA(${i})" style="margin-left:10px;flex-shrink:0">Remove</button></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:8px 0">No Q&A yet</div>';
 }
-
 function renderSkinPage(){
-  const fp=document.getElementById('facial-params');
-  const ep=document.getElementById('edu-params');
-  const fl=document.getElementById('facial-list');
+  const fp=document.getElementById('facial-params'),ep=document.getElementById('edu-params'),fl=document.getElementById('facial-list');
   fp.innerHTML=''; ep.innerHTML='';
   SKIN_PARAMS.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='param-card'+(p.facial?' has-facial':'');
-    div.innerHTML=`<div class="param-num">${p.id}</div>
-      <div class="param-name">${p.name}</div>
-      <div class="row-sub" style="font-size:10px">${p.hindi}</div>
-      ${p.facial?`<div class="param-treat">${p.treat} &nbsp;${p.price}</div>`:'<div style="font-size:10px;color:var(--muted);margin-top:3px">Education only</div>'}`;
-    (p.facial?fp:ep).appendChild(div);
+    const d=document.createElement('div'); d.className='param-card'+(p.facial?' has-facial':'');
+    d.innerHTML=`<div class="param-num">${p.id}</div><div class="param-name">${p.name}</div><div class="row-sub" style="font-size:10px">${p.hindi}</div>${p.facial?`<div class="param-treat">${p.treat} &nbsp;${p.price}</div>`:'<div style="font-size:10px;color:var(--muted);margin-top:3px">Education only</div>'}`;
+    (p.facial?fp:ep).appendChild(d);
   });
-  fl.innerHTML=FACIALS_KB.map(f=>`
-    <div class="row">
-      <div style="flex:1"><div class="row-name">${f.name}</div><div class="row-sub">${f.good_for}</div></div>
-      <div class="row-price">${f.price}</div></div>`).join('');
+  fl.innerHTML=FACIALS_KB.map(f=>`<div class="row"><div style="flex:1"><div class="row-name">${f.name}</div><div class="row-sub">${f.good_for}</div></div><div class="row-price">${f.price}</div></div>`).join('');
 }
 
+// ── SYSTEM PROMPT ─────────────────────────────────────────────
+function buildPresets(){
+  const grid=document.getElementById('preset-grid');
+  grid.innerHTML=PRESETS.map(p=>`
+    <div class="preset-card" id="preset-${p.id}" onclick="applyPreset('${p.id}')">
+      <div class="preset-title">${p.title}</div>
+      <div class="preset-desc">${p.desc}</div>
+    </div>`).join('');
+}
+
+function applyPreset(id){
+  const preset=PRESETS.find(p=>p.id===id);
+  if(!preset)return;
+  document.querySelectorAll('.preset-card').forEach(c=>c.classList.remove('active-preset'));
+  document.getElementById('preset-'+id).classList.add('active-preset');
+  document.getElementById('custom-prompt').value=preset.prompt;
+  updateCharCount(); updatePromptPreview();
+}
+
+function buildExamples(){
+  const el=document.getElementById('example-list');
+  el.innerHTML=EXAMPLE_INSTRUCTIONS.map((ex,i)=>`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);${i===EXAMPLE_INSTRUCTIONS.length-1?'border-bottom:none':''}">
+      <div style="flex:1">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:2px;font-weight:500">${ex.category}</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.5;font-family:'DM Mono',monospace">${ex.text}</div>
+      </div>
+      <button onclick="copyExample(${i})" style="padding:4px 10px;border:0.5px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;flex-shrink:0;margin-top:2px">Copy</button>
+    </div>`).join('');
+}
+
+function copyExample(i){
+  const ex=EXAMPLE_INSTRUCTIONS[i].text;
+  const ta=document.getElementById('custom-prompt');
+  const cur=ta.value.trim();
+  ta.value=(cur?cur+'\n':'')+'- '+ex;
+  updateCharCount(); updatePromptPreview();
+  ta.focus();
+  ta.scrollTop=ta.scrollHeight;
+}
+
+function loadPromptEditor(){
+  const saved=getCustomPrompt();
+  document.getElementById('custom-prompt').value=saved;
+  updateCharCount();
+}
+
+function updateCharCount(){
+  const len=document.getElementById('custom-prompt').value.length;
+  const el=document.getElementById('char-count');
+  el.textContent=len+' characters'+(len>2000?' (very long — consider trimming)':'');
+  el.className='char-count'+(len>3000?' over':len>2000?' warn':'');
+  updatePromptPreview();
+}
+
+function updatePromptPreview(){
+  const custom=document.getElementById('custom-prompt').value.trim();
+  const kb=getKB(); const ag=kb.agent||{};
+  const preview=document.getElementById('prompt-preview');
+  const customHtml=custom
+    ?`<span class="preview-custom">CUSTOM BEHAVIOUR INSTRUCTIONS:\n${custom}\n\n</span>`
+    :'<span style="color:var(--muted);font-style:italic">[No custom instructions yet — write above]\n\n</span>';
+  const builtIn=`<span class="preview-section">LANGUAGE RULE: Reply ONLY in the customer's language. Tamil→Tamil, Telugu→Telugu, Hindi→Hindi, Kannada→Kannada, English→English. Never mix.\n\nAGENT IDENTITY: You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly and warm').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'}.\n\nKNOWLEDGE BASE: [services, combos, discounts, Q&A — from your data]\n\nSKIN ANALYSIS: [15 parameters, 6 facials — built-in]\n\nCORE RULES: Answer known topics. Escalate unknowns. Keep replies 1-3 sentences.</span>`;
+  preview.innerHTML=customHtml+builtIn;
+}
+
+function clearPrompt(){
+  if(!confirm('Clear your custom prompt?'))return;
+  document.getElementById('custom-prompt').value='';
+  updateCharCount();
+  document.querySelectorAll('.preset-card').forEach(c=>c.classList.remove('active-preset'));
+}
+
+function resetPromptToDefault(){
+  document.getElementById('custom-prompt').value=DEFAULT_CUSTOM_PROMPT;
+  updateCharCount();
+  document.querySelectorAll('.preset-card').forEach(c=>c.classList.remove('active-preset'));
+}
+
+function savePrompt(){
+  const val=document.getElementById('custom-prompt').value.trim();
+  localStorage.setItem(PROMPT_KEY,val);
+  showMsg('prompt-msg');
+  updatePromptPreview();
+}
+
+// ── CRUD ──────────────────────────────────────────────────────
 function addService(){
   const key=document.getElementById('svc-key').value.trim().replace(/\s+/g,'_').toLowerCase();
   const desc=document.getElementById('svc-desc').value.trim();
@@ -605,8 +755,7 @@ function addService(){
   ['svc-key','svc-desc','svc-price'].forEach(id=>document.getElementById(id).value='');
   showMsg('svc-msg');
 }
-function delService(key){if(!confirm(`Remove "${key}"?`))return;const kb=getKB();delete kb.services[key];setKB(kb);renderServices();}
-
+function delService(k){if(!confirm(`Remove "${k}"?`))return;const kb=getKB();delete kb.services[k];setKB(kb);renderServices();}
 function addCombo(){
   const name=document.getElementById('c-name').value.trim();
   const orig=parseInt(document.getElementById('c-orig').value)||0;
@@ -619,7 +768,6 @@ function addCombo(){
   showMsg('combo-msg');
 }
 function delCombo(i){const kb=getKB();kb.combos.splice(i,1);setKB(kb);renderCombos();}
-
 function addDiscount(){
   const name=document.getElementById('d-name').value.trim();
   const value=document.getElementById('d-val').value.trim();
@@ -631,7 +779,6 @@ function addDiscount(){
   showMsg('disc-msg');
 }
 function delDiscount(i){const kb=getKB();kb.discounts.splice(i,1);setKB(kb);renderDiscounts();}
-
 function addQA(){
   const q=document.getElementById('q-q').value.trim();
   const a=document.getElementById('q-a').value.trim();
@@ -642,108 +789,100 @@ function addQA(){
 }
 function delQA(i){const kb=getKB();kb.qa.splice(i,1);setKB(kb);renderQA();}
 
+// ── SETTINGS ──────────────────────────────────────────────────
 function loadSettings(){
-  const kb=getKB(), s=kb.salon||{}, ag=kb.agent||{};
+  const kb=getKB(),s=kb.salon||{},ag=kb.agent||{};
   document.getElementById('s-name').value  = s.name||'';
   document.getElementById('s-hours').value = s.hours||'';
   document.getElementById('s-pay').value   = s.payment||'';
   document.getElementById('s-addr').value  = s.location||'';
   document.getElementById('ag-name').value = ag.name||'Kumar';
-  const styleEl=document.getElementById('ag-style');
-  if(ag.style) styleEl.value=ag.style;
-  document.getElementById('tog-upsell').classList.toggle('on', !!ag.upsell);
-  document.getElementById('tog-announce').classList.toggle('on', !!ag.announce);
+  if(ag.style) document.getElementById('ag-style').value=ag.style;
+  document.getElementById('tog-upsell').classList.toggle('on',!!ag.upsell);
+  document.getElementById('tog-announce').classList.toggle('on',!!ag.announce);
 }
-
 function saveSalon(){
   const kb=getKB();
-  kb.salon={name:document.getElementById('s-name').value.trim(),hours:document.getElementById('s-hours').value.trim(),
-            payment:document.getElementById('s-pay').value.trim(),location:document.getElementById('s-addr').value.trim()};
+  kb.salon={name:document.getElementById('s-name').value.trim(),hours:document.getElementById('s-hours').value.trim(),payment:document.getElementById('s-pay').value.trim(),location:document.getElementById('s-addr').value.trim()};
   setKB(kb); showMsg('salon-msg');
 }
-
 function saveAgentSettings(){
   const kb=getKB();
-  kb.agent={name:document.getElementById('ag-name').value.trim()||'Kumar',style:document.getElementById('ag-style').value,
-            upsell:document.getElementById('tog-upsell').classList.contains('on'),
-            announce:document.getElementById('tog-announce').classList.contains('on')};
+  kb.agent={name:document.getElementById('ag-name').value.trim()||'Kumar',style:document.getElementById('ag-style').value,upsell:document.getElementById('tog-upsell').classList.contains('on'),announce:document.getElementById('tog-announce').classList.contains('on')};
   setKB(kb); showMsg('agent-msg');
 }
-
 function loadKeys(){
   document.getElementById('anthropic-key').value = localStorage.getItem(APIKEY_KEY)||'';
   document.getElementById('eleven-key').value    = localStorage.getItem(ELEVENKEY)||'';
   document.getElementById('eleven-voice').value  = localStorage.getItem(VOICEID_KEY)||'pNInz6obpgDQGcFmaJgB';
 }
-
 function saveKeys(){
   localStorage.setItem(APIKEY_KEY,  document.getElementById('anthropic-key').value.trim());
   localStorage.setItem(ELEVENKEY,   document.getElementById('eleven-key').value.trim());
   localStorage.setItem(VOICEID_KEY, document.getElementById('eleven-voice').value.trim()||'pNInz6obpgDQGcFmaJgB');
   updateKeyStatuses(); showMsg('keys-msg');
 }
-
 function updateKeyStatuses(){
-  const ak=localStorage.getItem(APIKEY_KEY)||'', ek=localStorage.getItem(ELEVENKEY)||'';
-  const aEl=document.getElementById('anthropic-status'), eEl=document.getElementById('eleven-status');
-  if(aEl){aEl.textContent=ak?'Set':'Not set'; aEl.className='key-status '+(ak?'set':'unset');}
-  if(eEl){eEl.textContent=ek?'Set':'Not set'; eEl.className='key-status '+(ek?'set':'unset');}
+  const ak=localStorage.getItem(APIKEY_KEY)||'',ek=localStorage.getItem(ELEVENKEY)||'';
+  const aEl=document.getElementById('anthropic-status'),eEl=document.getElementById('eleven-status');
+  if(aEl){aEl.textContent=ak?'Set':'Not set';aEl.className='key-status '+(ak?'set':'unset');}
+  if(eEl){eEl.textContent=ek?'Set':'Not set';eEl.className='key-status '+(ek?'set':'unset');}
 }
-
 function checkKeyWarning(){
-  const ak=localStorage.getItem(APIKEY_KEY)||'';
   const el=document.getElementById('key-warning');
-  if(el) el.style.display=ak?'none':'block';
+  if(el) el.style.display=(localStorage.getItem(APIKEY_KEY)||'')?'none':'block';
 }
-
 function changePass(){
   const p1=document.getElementById('new-pass').value.trim();
   const p2=document.getElementById('new-pass2').value.trim();
   if(!p1){alert('Enter a new password');return;}
-  if(p1!==p2){document.getElementById('pass-err').style.display='block';setTimeout(()=>document.getElementById('pass-err').style.display='none',3000);return;}
+  if(p1!==p2){const e=document.getElementById('pass-err');e.style.display='block';setTimeout(()=>e.style.display='none',3000);return;}
   localStorage.setItem(PASS_KEY,p1);
   document.getElementById('new-pass').value=''; document.getElementById('new-pass2').value='';
   showMsg('pass-msg');
 }
-
 function resetAll(){
   if(!confirm('Delete ALL data and restore defaults?'))return;
-  localStorage.removeItem(KB_KEY); renderAll(); loadSettings();
-  alert('Reset complete. Default data restored.');
+  localStorage.removeItem(KB_KEY); localStorage.removeItem(PROMPT_KEY);
+  renderAll(); loadSettings(); loadPromptEditor(); updatePromptPreview();
+  alert('Reset complete.');
 }
-
 function exportKB(){
-  const kb=getKB();
-  const blob=new Blob([JSON.stringify(kb,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='knowledge_base.json'; a.click();
+  const data={kb:getKB(),system_prompt:getCustomPrompt()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barberpendant_config.json'; a.click();
 }
-function importKB(){ document.getElementById('import-file').click(); }
+function importKB(){document.getElementById('import-file').click();}
 function handleImport(e){
   const file=e.target.files[0]; if(!file)return;
   const reader=new FileReader();
-  reader.onload=ev=>{try{const kb=JSON.parse(ev.target.result);setKB(kb);renderAll();loadSettings();alert('Imported!');}catch{alert('Invalid JSON file.');}};
+  reader.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(d.kb){setKB(d.kb);}else{setKB(d);}
+      if(d.system_prompt) localStorage.setItem(PROMPT_KEY,d.system_prompt);
+      renderAll(); loadSettings(); loadPromptEditor(); updatePromptPreview();
+      alert('Imported successfully!');
+    }catch{alert('Invalid file.');}
+  };
   reader.readAsText(file); e.target.value='';
 }
 
+// ── TEST AGENT ────────────────────────────────────────────────
 function buildQuickTests(){
   const el=document.getElementById('quick-tests');
   el.innerHTML=QUICK_PHRASES.map(q=>`
-    <div class="quick-chip ${q.toLowerCase().includes('skin')||q.toLowerCase().includes('facial')||q.toLowerCase().includes('spot')||q.toLowerCase().includes('oily')?'skin-chip':''}"
-         onclick="quickTest('${q.replace(/'/g,"\\'")}')">
+    <div class="quick-chip ${/skin|facial|spot|oily/i.test(q)?'skin-chip':''}" onclick="quickTest('${q.replace(/'/g,"\\'")}')">
       ${q}
     </div>`).join('');
 }
-
-function quickTest(text){ document.getElementById('test-input').value=text; sendTest(); }
-
+function quickTest(text){document.getElementById('test-input').value=text; sendTest();}
 function addBubble(text,type,meta=''){
   const chat=document.getElementById('chat');
-  const div=document.createElement('div');
-  div.className=`bubble ${type}`;
+  const div=document.createElement('div'); div.className=`bubble ${type}`;
   div.innerHTML=text+(meta?`<div class="bubble-meta">${meta}</div>`:'');
   chat.appendChild(div); chat.scrollTop=chat.scrollHeight;
 }
-
 function addTyping(){
   const chat=document.getElementById('chat');
   const div=document.createElement('div'); div.id='typing-indicator'; div.className='bubble agent';
@@ -751,7 +890,7 @@ function addTyping(){
   chat.appendChild(div); chat.scrollTop=chat.scrollHeight;
 }
 function removeTyping(){const t=document.getElementById('typing-indicator');if(t)t.remove();}
-function clearChat(){document.getElementById('chat').innerHTML='';chatHistory=[];}
+function clearChat(){document.getElementById('chat').innerHTML=''; chatHistory=[];}
 
 async function sendTest(){
   const inp=document.getElementById('test-input');
@@ -761,41 +900,34 @@ async function sendTest(){
   if(!apiKey){addBubble('Anthropic API key not set. Go to Settings → API keys.','escalate');return;}
   addBubble(text,'cust','Customer'); addTyping();
   const kb=getKB(), ag=kb.agent||{};
+  const customPrompt=getCustomPrompt().trim();
 
-  const SYSTEM=`FIRST and MOST IMPORTANT RULE: Detect the exact language the customer is using and reply ONLY in that same language.
-- Customer speaks Tamil → reply in Tamil only
-- Customer speaks Telugu → reply in Telugu only
-- Customer speaks Hindi → reply in Hindi only
-- Customer speaks Kannada → reply in Kannada only
-- Customer speaks Malayalam → reply in Malayalam only
-- Customer speaks English → reply in English only
-Never reply in a different language. Never default to Hindi. Never mix languages.
+  const SYSTEM=`${customPrompt ? 'CUSTOM BEHAVIOUR INSTRUCTIONS (follow these first):\n'+customPrompt+'\n\n' : ''}LANGUAGE RULE — CRITICAL: Detect the exact language the customer is using and reply ONLY in that language.
+Tamil→Tamil only. Telugu→Telugu only. Hindi→Hindi only. Kannada→Kannada only. Malayalam→Malayalam only. English→English only. Never mix languages. Never default to Hindi.
 
 You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly and warm').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'} barber salon in India.
 
-COMPLETE KNOWLEDGE BASE:
+KNOWLEDGE BASE:
 ${JSON.stringify(kb,null,2)}
 
-${SKIN_SYSTEM_ADDON}
+${SKIN_ADDON}
 
-YOUR RULES:
-1. Answer questions about prices, services, combos, discounts, hours, payment, waiting time yourself.
-2. ${ag.upsell?'When customer asks about a single service, naturally mention a relevant combo deal.':'Do not suggest combos unless asked.'}
-3. Apply discounts automatically when customer says trigger phrases.
-4. At the START of the first interaction, ALWAYS mention the free AI Skin Analysis briefly and naturally.
-5. If customer asks about haircut or beard trim, suggest adding a facial at the end of your reply.
-6. If customer mentions a skin concern, recommend the specific facial for it with price.
-7. For styling instructions or anything NOT in the knowledge base, reply ONLY with:
-   ESCALATE: <one short polite sentence in the customer's language telling them staff will help>
-8. Keep replies to 1-3 sentences maximum — this will be spoken aloud.
-9. Sound warm, natural and human — not robotic.`;
+CORE RULES:
+1. Answer prices, services, combos, discounts, hours, payment, waiting time yourself.
+2. ${ag.upsell?'Naturally mention relevant combo deals when customer asks about a single service.':'Only suggest combos if asked.'}
+3. Apply discounts automatically when customer uses trigger phrases.
+4. Mention free AI Skin Analysis once at the start of each session.
+5. After haircut/beard trim question, suggest adding a facial.
+6. Match skin concerns to specific facial recommendations with price.
+7. For styling instructions or anything NOT in knowledge base, reply ONLY:
+   ESCALATE: <one short polite sentence in customer's language asking them to wait for staff>
+8. Keep replies to 1-3 sentences — spoken aloud.`;
 
-  try {
+  try{
     chatHistory.push({role:'user',content:text});
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,
-                'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:180,system:SYSTEM,messages:chatHistory})
     });
     const data=await resp.json();
@@ -806,14 +938,12 @@ YOUR RULES:
     if(reply.startsWith('ESCALATE:')){
       const bridge=reply.replace('ESCALATE:','').trim();
       addBubble(bridge,'agent',`${ag.name||'Kumar'} · routing to staff`);
-      addBubble('Staff receives translation of customer message in their language','escalate','Escalated to staff');
+      addBubble('Staff receives translation in their language','escalate','Escalated to staff');
     } else {
-      const isSkin=reply.toLowerCase().includes('facial')||reply.toLowerCase().includes('skin')||reply.toLowerCase().includes('analysis');
-      addBubble(reply, isSkin?'skin':'agent', `${ag.name||'Kumar'}${isSkin?' · skin recommendation':' (agent)'}`);
+      const isSkin=/facial|skin|analysis/i.test(reply);
+      addBubble(reply,isSkin?'skin':'agent',`${ag.name||'Kumar'}${isSkin?' · skin recommendation':' (agent)'}`);
     }
-  } catch(err){
-    removeTyping(); addBubble('Network error: '+err.message,'escalate');
-  }
+  }catch(err){removeTyping();addBubble('Network error: '+err.message,'escalate');}
 }
 
 function showMsg(id){
