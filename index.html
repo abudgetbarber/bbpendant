@@ -811,7 +811,7 @@ function updatePromptPreview(){
   const customHtml=custom
     ?`<span class="preview-custom">CUSTOM BEHAVIOUR INSTRUCTIONS:\n${custom}\n\n</span>`
     :'<span style="color:var(--muted);font-style:italic">[No custom instructions yet — write above]\n\n</span>';
-  const builtIn=`<span class="preview-section">LANGUAGE RULE: Reply ONLY in the customer's language. Tamil→Tamil, Telugu→Telugu, Hindi→Hindi, Kannada→Kannada, English→English. Never mix.\n\nAGENT IDENTITY: You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly and warm').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'}.\n\nKNOWLEDGE BASE: [services, combos, discounts, Q&A — from your data]\n\nSKIN ANALYSIS: [15 parameters, 6 facials — built-in]\n\nCORE RULES: Answer known topics. Escalate unknowns. Keep replies 1-3 sentences.</span>`;
+  const builtIn=`<span class="preview-section">##RULE 1 — LANGUAGE (highest priority):\nReply ONLY in customer's exact language. Tamil→Tamil only. Telugu→Telugu only. Hindi→Hindi only. Never mix even one word from another language.\n\n##RULE 2 — IDENTITY:\nYou are ${ag.name||'Kumar'} at ${kb.salon?.name||'Budget Barber'}.\n\n##RULE 3 — BEHAVIOUR:\n[Your custom prompt above]\n\n##RULE 4 — KNOWLEDGE BASE:\n[Services, combos, discounts, Q&A from your data]\n\n##RULE 5 — SKIN ANALYSIS:\n[15 parameters, 6 facials — built-in]\n\n##RULE 6 — CORE ACTIONS:\nAnswer known topics. Escalate unknowns. 1-3 sentences max.</span>`;
   preview.innerHTML=customHtml+builtIn;
 }
 
@@ -992,29 +992,67 @@ async function sendTest(){
   const kb=getKB(), ag=kb.agent||{};
   const customPrompt=getCustomPrompt().trim();
 
-  const SYSTEM=`${customPrompt ? 'CUSTOM BEHAVIOUR INSTRUCTIONS (follow these first):\n'+customPrompt+'\n\n' : ''}LANGUAGE RULE — CRITICAL: Detect the exact language the customer is using and reply ONLY in that language.
-Tamil→Tamil only. Telugu→Telugu only. Hindi→Hindi only. Kannada→Kannada only. Malayalam→Malayalam only. English→English only. Never mix languages. Never default to Hindi.
+  // Detect language from the current message
+  const langDetectMap = {
+    ta:['vanakkam','evvalavu','pannanum','irukeenga','nandri','enna','romba','thaan','illai','aamaa','paaru','sollu','trim','haircut','vennum','enga','epdi','eppadi','nalla','super','seri','ayya','anna'],
+    te:['namaskaram','ela','unnaru','chesukuntaru','cheppandi','unnadi','ayya','anna','baagundi','ledu','avutundi','chestanu','cheppanu','meeru','mee','oka','anni','chala','bagundi','chestuura'],
+    kn:['namaskara','hege','iddira','maadtira','helbeku','maadtivi','nimma','naamma','beku','illa','chennagide','aythu','enu','yenu','sir','avru','alli','ide'],
+    hi:['namaste','kaisa','kya','aapka','mujhe','chahiye','kitna','paisa','theek','achha','bilkul','bhai','bahut','arre','karo','lena','milta','hoon','raha','nahi','warna'],
+    ml:['nandi','sukhamano','evide','enthu','cheynam','parayamo','aanu','alla','undо','okay']
+  };
+  function detectLang(txt){
+    const t=txt.toLowerCase();
+    let best='', bestScore=0;
+    for(const [lang,words] of Object.entries(langDetectMap)){
+      const score=words.filter(w=>t.includes(w)).length;
+      if(score>bestScore){bestScore=score;best=lang;}
+    }
+    return best||'';
+  }
+  const detectedLang = detectLang(text);
+  const langNames = {ta:'Tamil',te:'Telugu',hi:'Hindi',kn:'Kannada',ml:'Malayalam',en:'English'};
+  const langName = langNames[detectedLang] || '';
 
-You are ${ag.name||'Kumar'}, a ${(ag.style||'friendly and warm').toLowerCase()} voice assistant at ${kb.salon?.name||'Budget Barber'} barber salon in India.
+  // Inject detected language as a prefix in the user message so model knows for certain
+  const augmentedText = langName
+    ? `[LANGUAGE DETECTED: ${langName}. You MUST reply in ${langName} only. Do not use any other language.]
+${text}`
+    : text;
 
-KNOWLEDGE BASE:
+  const SYSTEM=`##RULE 1 — LANGUAGE — THIS IS THE MOST IMPORTANT RULE OF ALL:
+You must reply in the EXACT language the customer is writing in. This rule overrides everything else.
+- If customer writes in Tamil → your entire reply must be in Tamil only. Not one Hindi or Telugu word.
+- If customer writes in Telugu → your entire reply must be in Telugu only. Not one Hindi or Tamil word.
+- If customer writes in Hindi → your entire reply must be in Hindi only.
+- If customer writes in Kannada → your entire reply must be in Kannada only.
+- If customer writes in Malayalam → your entire reply must be in Malayalam only.
+- If customer writes in English → your entire reply must be in English only.
+NEVER mix languages in a single reply. NEVER add Hindi words to a Tamil reply. NEVER add Telugu words to a Hindi reply. The customer's language is sacred — match it perfectly every single time.
+If the customer's message starts with [LANGUAGE DETECTED: X] — that is the confirmed language. Respond ONLY in X.
+
+##RULE 2 — IDENTITY:
+You are ${ag.name||'Kumar'}, a calm and trusted barber assistant at ${kb.salon?.name||'Budget Barber'} barber salon in India.
+
+##RULE 3 — BEHAVIOUR:
+${customPrompt || 'Be warm, helpful and genuine. Never push offers after customer says no.'}
+
+##RULE 4 — KNOWLEDGE BASE:
 ${JSON.stringify(kb,null,2)}
 
 ${SKIN_ADDON}
 
-CORE RULES:
+##RULE 5 — CORE ACTIONS:
 1. Answer prices, services, combos, discounts, hours, payment, waiting time yourself.
-2. ${ag.upsell?'Naturally mention relevant combo deals when customer asks about a single service.':'Only suggest combos if asked.'}
+2. ${ag.upsell?'Mention a relevant combo once naturally when customer asks about a single service.':'Only suggest combos if asked.'}
 3. Apply discounts automatically when customer uses trigger phrases.
-4. Mention free AI Skin Analysis once at the start of each session.
-5. After haircut/beard trim question, suggest adding a facial.
-6. Match skin concerns to specific facial recommendations with price.
-7. For styling instructions or anything NOT in knowledge base, reply ONLY:
-   ESCALATE: <one short polite sentence in customer's language asking them to wait for staff>
-8. Keep replies to 1-3 sentences — spoken aloud.`;
+4. Mention free AI Skin Analysis once — only after service is confirmed.
+5. Match skin concerns to specific facial with price.
+6. For styling instructions or anything NOT in knowledge base reply ONLY:
+   ESCALATE: <one short polite sentence in customer's language>
+7. Keep replies to 1-3 sentences — this is spoken aloud.`;
 
   try{
-    chatHistory.push({role:'user',content:text});
+    chatHistory.push({role:'user',content:augmentedText});
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
